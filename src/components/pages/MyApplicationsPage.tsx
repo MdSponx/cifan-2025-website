@@ -15,6 +15,7 @@ interface ApplicationData {
   status: 'draft' | 'submitted';
   filmTitle: string;
   filmTitleTh?: string;
+  filmLanguage?: string;
   files: {
     posterFile: {
       downloadURL: string;
@@ -74,6 +75,7 @@ const MyApplicationsPage: React.FC<MyApplicationsPageProps> = ({ onSidebarToggle
             status: data.status,
             filmTitle: data.filmTitle,
             filmTitleTh: data.filmTitleTh,
+            filmLanguage: data.filmLanguage,
             files: {
               posterFile: {
                 downloadURL: data.files?.posterFile?.downloadURL || data.files?.posterFile?.url || '',

@@ -55,6 +55,7 @@ export const getValidationMessages = (language: 'th' | 'en') => {
     required: language === 'th' ? 'กรุณากรอกข้อมูลนี้' : 'This field is required',
     invalidEmail: language === 'th' ? 'รูปแบบอีเมลไม่ถูกต้อง' : 'Please enter a valid email address',
     formatRequired: language === 'th' ? 'กรุณาเลือกรูปแบบภาพยนตร์' : 'Please select film format',
+    filmLanguageRequired: language === 'th' ? 'กรุณาเลือกภาษาในภาพยนตร์' : 'Please select film language',
     invalidAge: (category: 'YOUTH' | 'FUTURE' | 'WORLD') => {
       const limits = AGE_LIMITS[category];
       return language === 'th' 

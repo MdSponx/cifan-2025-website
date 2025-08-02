@@ -11,6 +11,7 @@ import {
 interface CompactFilmInfoProps {
   filmTitle: string;
   filmTitleTh?: string;
+  filmLanguage?: string;
   genres: string[];
   format: string;
   duration: number;
@@ -32,6 +33,7 @@ interface CompactFilmInfoProps {
 const CompactFilmInfo: React.FC<CompactFilmInfoProps> = ({
   filmTitle,
   filmTitleTh,
+  filmLanguage,
   genres,
   format,
   duration,
@@ -224,6 +226,15 @@ const CompactFilmInfo: React.FC<CompactFilmInfoProps> = ({
               </span>
             </div>
           </div>
+            {/* Film Language Badge */}
+            {filmLanguage && (
+              <div className="flex items-center space-x-2 px-3 py-2 glass-card rounded-lg">
+                <span className="text-lg">🗣️</span>
+                <span className={`text-sm ${getClass('body')} text-white font-medium`}>
+                  {filmLanguage}
+                </span>
+              </div>
+            )}
 
           {/* Genre Pills - Moved to Right Side */}
           {genres && genres.length > 0 && (

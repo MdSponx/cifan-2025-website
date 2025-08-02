@@ -30,6 +30,7 @@ interface EditableApplicationData {
   // Film Information
   filmTitle: string;
   filmTitleTh?: string;
+  filmLanguage?: string;
   genres: string[];
   format: string;
   duration: number;
@@ -148,6 +149,7 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
             // Film Information
             filmTitle: data.filmTitle || '',
             filmTitleTh: data.filmTitleTh,
+            filmLanguage: data.filmLanguage || 'Thai',
             genres: data.genres || [],
             format: data.format || '',
             duration: data.duration || 0,
@@ -249,6 +251,7 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
       // Form fields
       filmTitle: "ชื่อภาพยนตร์ (ภาษาอังกฤษ)",
       filmTitleTh: "ชื่อภาพยนตร์ (ภาษาไทย)",
+      filmLanguage: "ภาษาในภาพยนตร์",
       duration: "ความยาว (นาที)",
       synopsis: "เรื่องย่อ",
       chiangmaiConnection: "ความเกี่ยวข้องกับเชียงใหม่",
@@ -286,6 +289,7 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
       // Form fields
       filmTitle: "Film Title (English)",
       filmTitleTh: "Film Title (Thai)",
+      filmLanguage: "Film Language",
       duration: "Duration (minutes)",
       synopsis: "Synopsis",
       chiangmaiConnection: "Connection to Chiang Mai",
@@ -433,6 +437,7 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
         // Film Information
         filmTitle: application.filmTitle,
         filmTitleTh: application.filmTitleTh || null,
+        filmLanguage: application.filmLanguage || 'Thai',
         genres: application.genres,
         format: application.format,
         duration: application.duration,
@@ -669,6 +674,44 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
                     <ErrorMessage error={formErrors.filmTitleTh} />
                   </div>
                 )}
+              </div>
+              
+              {/* Film Language */}
+              <div>
+                <label className={`block text-white/90 ${getClass('body')} mb-2`}>
+                  {currentContent.filmLanguage} <span className="text-red-400">*</span>
+                </label>
+                <select
+                  value={application.filmLanguage || 'Thai'}
+                  onChange={(e) => handleInputChange('filmLanguage', e.target.value)}
+                  className="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white focus:border-[#FCB283] focus:outline-none"
+                  required
+                >
+                  <option value="Thai" className="bg-[#110D16]">
+                    {currentLanguage === 'th' ? 'ภาษาไทย' : 'Thai'}
+                  </option>
+                  <option value="English" className="bg-[#110D16]">
+                    {currentLanguage === 'th' ? 'ภาษาอังกฤษ' : 'English'}
+                  </option>
+                  <option value="Mandarin" className="bg-[#110D16]">
+                    {currentLanguage === 'th' ? 'ภาษาจีนกลาง' : 'Mandarin Chinese'}
+                  </option>
+                  <option value="Japanese" className="bg-[#110D16]">
+                    {currentLanguage === 'th' ? 'ภาษาญี่ปุ่น' : 'Japanese'}
+                  </option>
+                  <option value="Korean" className="bg-[#110D16]">
+                    {currentLanguage === 'th' ? 'ภาษาเกาหลี' : 'Korean'}
+                  </option>
+                  <option value="Other" className="bg-[#110D16]">
+                    {currentLanguage === 'th' ? 'อื่นๆ' : 'Other'}
+                  </option>
+                </select>
+                <p className={`text-xs ${getClass('body')} text-white/60 mt-1`}>
+                  {currentLanguage === 'th' 
+                    ? 'หากใช้ภาษาอื่นที่ไม่ใช่ไทยหรืออังกฤษ กรุณาเตรียมซับไตเติล'
+                    : 'If using a language other than Thai or English, please prepare subtitles'
+                  }
+                </p>
               </div>
               
               {/* Genre Selector */}
