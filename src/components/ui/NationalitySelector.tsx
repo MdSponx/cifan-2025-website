@@ -330,7 +330,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
           )}
         </div>
       )}
-    </div>
+
       {/* Film Language Selector */}
       <div className="mb-6">
         <label className={`block text-white/90 ${getTypographyClass('body')} mb-2`}>
@@ -365,6 +365,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
           </div>
         </div>
       </div>
+    </div>
   );
 };
 
