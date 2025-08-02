@@ -16,6 +16,7 @@ interface ApplicationData {
   status: 'draft' | 'submitted';
   filmTitle: string;
   filmTitleTh?: string;
+  filmLanguage?: string;
   genres: string[];
   format: string;
   duration: number;
@@ -99,6 +100,7 @@ const ApplicationDetailPage: React.FC<ApplicationDetailPageProps> = ({
             status: data.status || 'draft',
             filmTitle: data.filmTitle,
             filmTitleTh: data.filmTitleTh,
+            filmLanguage: data.filmLanguage,
             genres: data.genres || [],
             format: data.format,
             duration: data.duration,

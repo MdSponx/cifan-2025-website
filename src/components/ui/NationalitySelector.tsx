@@ -86,12 +86,16 @@ const countryFlags: { [key: string]: string } = {
 interface NationalitySelectorProps {
   onNationalityChange: (nationality: string) => void;
   onNationalityTypeChange: (isThaiNationality: boolean) => void;
+  onFilmLanguageChange: (language: string) => void;
+  filmLanguage?: string;
   className?: string;
 }
 
 const NationalitySelector: React.FC<NationalitySelectorProps> = ({
   onNationalityChange,
   onNationalityTypeChange,
+  onFilmLanguageChange,
+  filmLanguage = 'Thai',
   className = ''
 }) => {
   const { i18n } = useTranslation();
@@ -113,18 +117,41 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
       nationalityTitle: "สัญชาติ",
       thaiOption: "ไทย",
       internationalOption: "นานาชาติ",
-      searchCountry: "ค้นหาประเทศ..."
+      searchCountry: "ค้นหาประเทศ...",
+      filmLanguageTitle: "ภาษาในภาพยนตร์",
+      filmLanguageDesc: "ภาษาหลักที่ใช้ในภาพยนตร์ของคุณ"
     },
     en: {
       nationalityTitle: "Nationality",
       thaiOption: "THAI",
       internationalOption: "International",
-      searchCountry: "Search country..."
+      searchCountry: "Search country...",
+      filmLanguageTitle: "Film Language",
+      filmLanguageDesc: "Primary language used in your film"
     }
   };
 
   const currentContent = content[currentLanguage];
 
+  // Film language options
+  const filmLanguageOptions = [
+    { value: 'Thai', label: { th: 'ภาษาไทย', en: 'Thai' } },
+    { value: 'English', label: { th: 'ภาษาอังกฤษ', en: 'English' } },
+    { value: 'Mandarin', label: { th: 'ภาษาจีนกลาง', en: 'Mandarin Chinese' } },
+    { value: 'Japanese', label: { th: 'ภาษาญี่ปุ่น', en: 'Japanese' } },
+    { value: 'Korean', label: { th: 'ภาษาเกาหลี', en: 'Korean' } },
+    { value: 'Vietnamese', label: { th: 'ภาษาเวียดนาม', en: 'Vietnamese' } },
+    { value: 'Malay', label: { th: 'ภาษามาเลย์', en: 'Malay' } },
+    { value: 'Indonesian', label: { th: 'ภาษาอินโดนีเซีย', en: 'Indonesian' } },
+    { value: 'Hindi', label: { th: 'ภาษาฮินดี', en: 'Hindi' } },
+    { value: 'Spanish', label: { th: 'ภาษาสเปน', en: 'Spanish' } },
+    { value: 'French', label: { th: 'ภาษาฝรั่งเศส', en: 'French' } },
+    { value: 'German', label: { th: 'ภาษาเยอรมัน', en: 'German' } },
+    { value: 'Portuguese', label: { th: 'ภาษาโปรตุเกส', en: 'Portuguese' } },
+    { value: 'Russian', label: { th: 'ภาษารัสเซีย', en: 'Russian' } },
+    { value: 'Arabic', label: { th: 'ภาษาอาหรับ', en: 'Arabic' } },
+    { value: 'Other', label: { th: 'อื่นๆ', en: 'Other' } }
+  ];
   // Filter countries based on search
   const filteredCountries = COUNTRIES.filter(country =>
     country.toLowerCase().includes(countrySearch.toLowerCase())
@@ -151,12 +178,16 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
       onNationalityChange('Thailand');
       onNationalityTypeChange(true);
       setCountrySearch('');
+      // Default to Thai language for Thai nationality
+      onFilmLanguageChange('Thai');
     } else {
       // CRITICAL FIX: When switching to 'international', immediately set parent nationality to empty
       // and clear the local country search state.
       onNationalityChange(''); // Set parent form's nationality to empty string
       onNationalityTypeChange(false);
       setCountrySearch(''); // Clear local search input
+      // Default to English for international
+      onFilmLanguageChange('English');
     }
   };
 
@@ -206,6 +237,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
   useEffect(() => {
     onNationalityChange('Thailand');
     onNationalityTypeChange(true);
+    onFilmLanguageChange('Thai');
   }, [onNationalityChange, onNationalityTypeChange]);
 
   return (
@@ -299,6 +331,40 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
         </div>
       )}
     </div>
+      {/* Film Language Selector */}
+      <div className="mb-6">
+        <label className={`block text-white/90 ${getTypographyClass('body')} mb-2`}>
+          {currentContent.filmLanguageTitle} <span className="text-red-400">*</span>
+        </label>
+        <p className={`text-xs ${getTypographyClass('body')} text-white/60 mb-3`}>
+          {currentContent.filmLanguageDesc}
+        </p>
+        <select
+          value={filmLanguage}
+          onChange={(e) => onFilmLanguageChange(e.target.value)}
+          className="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white focus:border-[#FCB283] focus:outline-none"
+          required
+        >
+          {filmLanguageOptions.map((option) => (
+            <option key={option.value} value={option.value} className="bg-[#110D16]">
+              {option.label[currentLanguage]}
+            </option>
+          ))}
+        </select>
+        
+        {/* Language Note */}
+        <div className="mt-3 p-3 bg-blue-500/10 border border-blue-400/20 rounded-lg">
+          <div className="flex items-start space-x-2">
+            <div className="text-blue-400 text-sm mt-0.5">💡</div>
+            <p className={`text-blue-300 ${getTypographyClass('menu')} text-sm leading-relaxed`}>
+              {currentLanguage === 'th' 
+                ? 'หากภาพยนตร์ของคุณใช้ภาษาอื่นที่ไม่ใช่ภาษาไทยหรือภาษาอังกฤษ กรุณาเตรียมซับไตเติลภาษาไทยหรือภาษาอังกฤษ'
+                : 'If your film uses a language other than Thai or English, please prepare Thai or English subtitles'
+              }
+            </p>
+          </div>
+        </div>
+      </div>
   );
 };
 

@@ -18,6 +18,7 @@ interface ApplicationData {
   status: 'draft' | 'submitted';
   filmTitle: string;
   filmTitleTh?: string;
+  filmLanguage?: string;
   genres: string[];
   format: string;
   duration: number;
@@ -295,6 +296,14 @@ const ApplicationLayout: React.FC<ApplicationLayoutProps> = ({ application }) =>
                       {application.duration} {currentLanguage === 'th' ? 'นาที' : 'minutes'}
                     </span>
                   </div>
+                  {application.filmLanguage && (
+                    <div className="flex items-center space-x-3">
+                      <span className="text-xl">🗣️</span>
+                      <span className={`${getClass('body')} text-white`}>
+                        {application.filmLanguage}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
 

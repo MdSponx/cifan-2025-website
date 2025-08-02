@@ -40,6 +40,7 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
       applicationId: `${category}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       filmTitle: '',
       filmTitleTh: '',
+      filmLanguage: 'Thai',
       genres: [],
       format: '' as 'live-action' | 'animation' | '',
       duration: '',
@@ -62,6 +63,7 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
       return {
         ...baseData,
         nationality: 'Thailand',
+        filmLanguage: 'Thai',
         submitterName: '',
         submitterNameTh: '',
         submitterAge: '',
@@ -76,6 +78,7 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
       return {
         ...baseData,
         nationality: 'Thailand',
+        filmLanguage: 'Thai',
         submitterName: '',
         submitterNameTh: '',
         submitterAge: '',
@@ -90,6 +93,7 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
     } else {
       return {
         ...baseData,
+        filmLanguage: 'Thai',
         directorName: '',
         directorNameTh: '',
         directorAge: '',
@@ -335,6 +339,9 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
     handleInputChange('nationality', nationality);
   };
 
+  const handleFilmLanguageChange = (language: string) => {
+    handleInputChange('filmLanguage', language);
+  };
   // Compute Thai nationality status for validation and rendering
   const isThaiNationality = (category === 'youth' || category === 'future') && 
     (formData as YouthFormData | FutureFormData).nationality === 'Thailand';
@@ -507,6 +514,8 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
             <NationalitySelector
               onNationalityChange={handleNationalityChange}
               onNationalityTypeChange={() => {}} // No longer needed but kept for compatibility
+              onFilmLanguageChange={handleFilmLanguageChange}
+              filmLanguage={formData.filmLanguage}
             />
           </div>
 

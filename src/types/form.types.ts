@@ -23,6 +23,7 @@ export interface BaseFormData {
   filmTitle: string;
   filmTitleTh?: string;
   filmTitleEn?: string;
+  filmLanguage: string;
   genres: string[];
   format: 'live-action' | 'animation' | '';
   duration: string;
@@ -43,6 +44,7 @@ export interface BaseFormData {
 
 export interface YouthFormData extends BaseFormData {
   nationality: string;
+  filmLanguage: string;
   
   // Submitter Information
   submitterName: string;
@@ -65,6 +67,8 @@ export interface YouthFormData extends BaseFormData {
 }
 
 export interface WorldFormData extends BaseFormData {
+  filmLanguage: string;
+  
   // Director Information
   directorName: string;
   directorNameTh?: string;
@@ -85,6 +89,7 @@ export interface WorldFormData extends BaseFormData {
 
 export interface FutureFormData extends BaseFormData {
   nationality: string;
+  filmLanguage: string;
   
   // Submitter Information
   submitterName: string;
