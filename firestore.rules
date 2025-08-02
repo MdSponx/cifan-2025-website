@@ -1,0 +1,29 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Profiles collection - users can read/write their own profile
+    match /profiles/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Submissions collection - users can create and read their own submissions
+    match /submissions/{submissionId} {
+      allow create: if request.auth != null;
+      allow read, update: if request.auth != null && 
+        request.auth.uid == resource.data.userId;
+    }
+    
+    // Admin collection - only for admin users
+    match /admin/{document=**} {
+      allow read, write: if request.auth != null && 
+        get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Public collections (read-only for all users)
+    match /public/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

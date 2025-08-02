@@ -1,0 +1,1214 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Typography Classes */
+.nav-en {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+}
+
+.nav-th {
+  font-family: 'Anuphan', sans-serif !important;
+  font-weight: 300;
+  font-size: 1.05em; /* 5% larger than default */
+}
+
+.header-en {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 600;
+}
+
+.header-th {
+  font-family: 'Anuphan', sans-serif;
+  font-weight: 600;
+  font-size: 1.15em; /* 15% larger than default */
+}
+
+.subtitle-en {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+}
+
+.subtitle-th {
+  font-family: 'Anuphan', sans-serif;
+  font-weight: 200;
+  font-size: 1.1em; /* 10% larger than default */
+}
+
+.body-en {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+}
+
+.body-th {
+  font-family: 'Anuphan', sans-serif;
+  font-weight: 400;
+  font-size: 1.08em; /* 8% larger than default */
+}
+
+.menu-en {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
+}
+
+.menu-th {
+  font-family: 'Anuphan', sans-serif;
+  font-weight: 200;
+  font-size: 1.05em; /* 5% larger than default */
+}
+
+/* Navigation Font - Raleway Medium 500 */
+.nav-font {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+}
+
+/* Glass Morphism Base Classes */
+.glass-container {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 48, 90, 0.3);
+  isolation: isolate;
+  position: relative;
+  contain: layout style;
+  overflow: hidden;
+}
+
+/* Form Section Specific Container */
+.form-section-container {
+  isolation: isolate;
+  contain: layout style;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2rem;
+  overflow: visible !important;
+  contain: none !important;
+  transform: translateZ(0);
+  will-change: transform;
+  min-height: fit-content;
+  height: auto;
+}
+
+/* Layout Containment Utility */
+.contain-layout {
+  contain: layout style;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Nationality Dropdown Styles */
+.nationality-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  margin-top: 4px;
+  
+  background: rgba(17, 17, 17, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  
+  max-height: 240px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.nationality-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  color: white;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  gap: 12px;
+}
+
+.nationality-dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Custom scrollbar */
+.nationality-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nationality-dropdown::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.nationality-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(252, 178, 131, 0.4);
+  border-radius: 3px;
+}
+
+/* Ensure parent containers don't clip dropdown */
+.glass-container,
+.unified-form-container,
+.user-zone-content,
+form {
+  overflow: visible !important;
+}
+
+/* Fixed positioning dropdown for nationality selector */
+.nationality-dropdown-fixed {
+  position: fixed !important;
+  z-index: 99999 !important;
+  background: rgba(17, 13, 22, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease-out;
+}
+
+/* Ensure dropdowns are not clipped */
+.overflow-visible {
+  overflow: visible !important;
+  contain: none !important;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px rgba(170, 70, 38, 0.2);
+  border-color: rgba(252, 178, 131, 0.3);
+}
+
+/* Button Styles */
+.glass-button {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Liquid Glass Button Style */
+.liquid-glass-button {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50px;
+  padding: 12px 32px;
+  color: rgba(255, 255, 255, 0.9);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.liquid-glass-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 255, 255, 0.05) 50%, 
+    rgba(255, 255, 255, 0.1) 100%);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.liquid-glass-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.liquid-glass-button:hover::before {
+  opacity: 1;
+}
+
+.liquid-glass-button:active {
+  transform: translateY(0);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Pill-shaped Glass Button */
+.liquid-glass-button-pill {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 25px;
+  width: 50px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.liquid-glass-button-pill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 255, 255, 0.05) 50%, 
+    rgba(255, 255, 255, 0.1) 100%);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.liquid-glass-button-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.liquid-glass-button-pill:hover::before {
+  opacity: 1;
+}
+
+.liquid-glass-button-pill:active {
+  transform: translateY(0);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+/* Circular Language Button */
+.liquid-glass-button-circle {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.liquid-glass-button-circle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 255, 255, 0.05) 50%, 
+    rgba(255, 255, 255, 0.1) 100%);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.liquid-glass-button-circle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.liquid-glass-button-circle:hover::before {
+  opacity: 1;
+}
+
+.liquid-glass-button-circle:active {
+  transform: translateY(0);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+.glass-button-primary {
+  background: linear-gradient(135deg, #AA4626, #FCB283);
+  border: 1px solid rgba(170, 70, 38, 0.5);
+  color: white;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-button-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s;
+}
+
+.glass-button-primary:hover::before {
+  left: 100%;
+}
+
+.glass-button-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(170, 70, 38, 0.4);
+  border-color: rgba(252, 178, 131, 0.8);
+}
+
+.glass-button-secondary {
+  background: rgba(59, 104, 145, 0.2);
+  border: 1px solid rgba(59, 104, 145, 0.4);
+  color: #FCB283;
+  font-weight: 500;
+}
+
+.glass-button-secondary:hover {
+  background: rgba(59, 104, 145, 0.3);
+  border-color: rgba(252, 178, 131, 0.6);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Animated Gradient Blobs */
+.gradient-blob {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.6;
+  mix-blend-mode: screen;
+  filter: blur(40px);
+  animation: blob-float 20s infinite ease-in-out;
+}
+
+.blob-1 {
+  width: 400px;
+  height: 400px;
+  top: 10%;
+  left: 10%;
+  background: radial-gradient(circle, #6EE7B7 0%, transparent 70%);
+  animation-delay: 0s;
+}
+
+.blob-2 {
+  width: 350px;
+  height: 350px;
+  top: 60%;
+  right: 15%;
+  background: radial-gradient(circle, #3B82F6 0%, transparent 70%);
+  animation-delay: -7s;
+}
+
+.blob-3 {
+  width: 300px;
+  height: 300px;
+  bottom: 20%;
+  left: 60%;
+  background: radial-gradient(circle, #A78BFA 0%, transparent 70%);
+  animation-delay: -14s;
+}
+
+.blob-4 {
+  width: 250px;
+  height: 250px;
+  top: 30%;
+  right: 40%;
+  background: radial-gradient(circle, #F472B6 0%, transparent 70%);
+  animation-delay: -3s;
+}
+
+.blob-special-1 {
+  width: 300px;
+  height: 300px;
+  top: 10%;
+  right: 10%;
+  background: radial-gradient(circle, #FCB283 0%, transparent 70%);
+  animation-delay: -10s;
+}
+
+.blob-special-2 {
+  width: 200px;
+  height: 200px;
+  bottom: 20%;
+  left: 10%;
+  background: radial-gradient(circle, #AA4626 0%, transparent 70%);
+  animation-delay: -5s;
+}
+
+@keyframes blob-float {
+  0%, 100% { 
+    transform: translate(0, 0) scale(1) rotate(0deg); 
+  }
+  25% { 
+    transform: translate(-50px, -50px) scale(1.1) rotate(90deg); 
+  }
+  50% { 
+    transform: translate(-100px, 50px) scale(0.9) rotate(180deg); 
+  }
+  75% { 
+    transform: translate(50px, -25px) scale(1.05) rotate(270deg); 
+  }
+}
+
+/* Prize Glow Effect */
+.prize-glow {
+  background: linear-gradient(135deg, #FCB283, #AA4626, #FCB283);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: prize-pulse 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(252, 178, 131, 0.5));
+}
+
+@keyframes prize-pulse {
+  0%, 100% { 
+    filter: drop-shadow(0 0 20px rgba(252, 178, 131, 0.5)); 
+  }
+  50% { 
+    filter: drop-shadow(0 0 40px rgba(170, 70, 38, 0.8));
+    transform: scale(1.05);
+  }
+}
+
+/* Gradient Animation */
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+
+/* Fade In Animations */
+.animate-fade-in-up {
+  animation: fade-in-up 1s ease-out;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced Loading Spinner */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(252, 178, 131, 0.3);
+  border-top: 3px solid #FCB283;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-spinner.small {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+.loading-spinner.large {
+  width: 60px;
+  height: 60px;
+  border-width: 4px;
+}
+
+/* Success Animation */
+@keyframes success-bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -30px, 0);
+  }
+  70% {
+    transform: translate3d(0, -15px, 0);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+.animate-success-bounce {
+  animation: success-bounce 1s ease-in-out;
+}
+
+/* Pulse Animation for Status Indicators */
+@keyframes status-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.animate-status-pulse {
+  animation: status-pulse 2s ease-in-out infinite;
+}
+
+/* Smooth Transitions */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Touch-friendly buttons for mobile */
+@media (max-width: 768px) {
+  .touch-button {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
+/* Responsive Hero Banner */
+@media (max-height: 600px) {
+  .glass-container {
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+}
+
+@media (min-height: 900px) {
+  .glass-container {
+    max-height: 80vh;
+  }
+}
+
+/* Scroll Reveal Animation */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hover Glow Effects */
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 30px rgba(252, 178, 131, 0.3);
+  border-color: rgba(252, 178, 131, 0.5);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(252, 178, 131, 0.3);
+  border-top: 3px solid #FCB283;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(17, 13, 22, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #FCB283, #AA4626);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #AA4626, #FCB283);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Text selection */
+::selection {
+  background: rgba(252, 178, 131, 0.3);
+  color: white;
+}
+
+/* Gentle pulse animation for Coming Soon text */
+.animate-gentle-pulse {
+  animation: gentle-pulse 3s ease-in-out infinite;
+}
+
+@keyframes gentle-pulse {
+  0%, 100% { 
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+/* User Zone Sidebar Styles */
+.user-zone-sidebar {
+  background: rgba(17, 13, 22, 0.92);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 8px 32px rgba(0, 48, 90, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Sidebar Menu Item Hover Effects */
+.sidebar-menu-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-menu-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(252, 178, 131, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.sidebar-menu-item:hover::before {
+  left: 100%;
+}
+
+/* User Zone Layout Transitions */
+.user-zone-content {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Ensure sidebar stays above content */
+.user-zone-sidebar {
+  z-index: 1000;
+}
+
+/* Floating sidebar specific styles */
+.floating-sidebar {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  height: calc(100vh - 2rem);
+  border-radius: 1rem;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Content area adjustments for floating sidebar */
+.content-with-sidebar {
+  padding-left: 20rem; /* 320px sidebar offset */
+  margin-top: 6rem; /* 96px - align with sidebar top position */
+  transition: margin-left 0.3s ease-in-out;
+}
+
+@media (max-width: 1023px) {
+  .content-with-sidebar {
+    padding-left: 0;
+    margin-top: 0;
+  }
+  
+  .floating-sidebar {
+    top: 5rem;
+    left: 0;
+    height: calc(100vh - 5rem);
+    border-radius: 0;
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+  }
+}
+
+/* Mobile Sidebar Overlay */
+@media (max-width: 1023px) {
+  .sidebar-overlay {
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* Responsive Sidebar Adjustments */
+@media (min-width: 1024px) {
+  .user-zone-sidebar {
+    position: fixed;
+    transform: none !important;
+  }
+}
+
+/* Full width content utilities */
+.full-width-content {
+  width: 100%;
+  max-width: none;
+}
+
+.sidebar-offset {
+  padding-left: 20rem; /* 320px */
+}
+
+@media (max-width: 1023px) {
+  .sidebar-offset {
+    padding-left: 0;
+  }
+}
+/* Line clamp utility for text truncation */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Chart Styling */
+.chart-content {
+  position: relative;
+}
+
+.chart-content .recharts-wrapper {
+  font-family: 'Raleway', sans-serif;
+}
+
+.chart-content .recharts-cartesian-grid-horizontal line {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-dasharray: 3 3;
+}
+
+.chart-content .recharts-cartesian-grid-vertical line {
+  stroke: rgba(255, 255, 255, 0.05);
+}
+
+/* Custom chart tooltips */
+.recharts-tooltip-wrapper {
+  z-index: 1000;
+}
+
+/* Chart animations */
+.recharts-pie-sector {
+  transition: all 0.3s ease;
+}
+
+.recharts-pie-sector:hover {
+  filter: brightness(1.1);
+  transform: scale(1.02);
+}
+
+.recharts-bar-rectangle {
+  transition: all 0.3s ease;
+}
+
+.recharts-bar-rectangle:hover {
+  filter: brightness(1.1);
+}
+
+.recharts-line-dot {
+  transition: all 0.3s ease;
+}
+
+.recharts-line-dot:hover {
+  transform: scale(1.2);
+}
+
+/* Admin Zone Specific Styles */
+.admin-glass-container {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 8px 32px rgba(252, 178, 131, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  isolation: isolate;
+  position: relative;
+  contain: layout style;
+  overflow: hidden;
+}
+
+/* Admin Badge Glow Effect */
+.admin-badge-glow {
+  background: linear-gradient(135deg, #FCB283, #AA4626);
+  box-shadow: 0 0 20px rgba(252, 178, 131, 0.4);
+  animation: admin-pulse 2s ease-in-out infinite;
+}
+
+@keyframes admin-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(252, 178, 131, 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(252, 178, 131, 0.6);
+  }
+}
+
+/* Admin Sidebar Menu Item Hover Effects */
+.admin-sidebar-menu-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-sidebar-menu-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(252, 178, 131, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.admin-sidebar-menu-item:hover::before {
+  left: 100%;
+}
+
+/* Admin Zone Layout Transitions */
+.admin-zone-content {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Admin specific glass morphism */
+.admin-glass-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin-glass-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(252, 178, 131, 0.15);
+  border-color: rgba(252, 178, 131, 0.25);
+}
+
+/* Notification animations */
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Export dialog animations */
+.export-dialog-enter {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.export-dialog-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.2s ease-out;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+  
+  .glass-container {
+    background: white !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+  
+  .glass-card {
+    background: #f9f9f9 !important;
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .text-white {
+    color: black !important;
+  }
+  
+  .text-white\/80,
+  .text-white\/90,
+  .text-white\/70,
+  .text-white\/60 {
+    color: #666 !important;
+  }
+}
+
+/* Admin status indicators */
+.admin-status-online {
+  background: linear-gradient(135deg, #10B981, #059669);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+.admin-status-busy {
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+}
+
+/* Admin floating sidebar specific styles */
+.admin-floating-sidebar {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  height: calc(100vh - 2rem);
+  border-radius: 1rem;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(252, 178, 131, 0.05);
+}
+
+/* Admin content area adjustments */
+.admin-content-with-sidebar {
+  padding-left: 20rem;
+  margin-top: 6rem;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+@media (max-width: 1023px) {
+  .admin-content-with-sidebar {
+    padding-left: 0;
+    margin-top: 0;
+  }
+  
+  .admin-floating-sidebar {
+    top: 5rem;
+    left: 0;
+    height: calc(100vh - 5rem);
+    border-radius: 0;
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+  }
+}
+
+/* Mobile responsive improvements */
+@media (max-width: 768px) {
+  .nationality-dropdown {
+    max-height: 200px;
+    left: 0;
+    right: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* Crew Management Container Fixes */
+.crew-management-container {
+  overflow: visible !important;
+  contain: none !important;
+  height: auto !important;
+  min-height: fit-content !important;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 3rem !important;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Crew Form Container */
+.crew-form-container {
+  overflow: visible !important;
+  contain: none !important;
+  position: relative;
+  z-index: 10;
+  min-height: fit-content;
+  height: auto;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Crew Table Container */
+.crew-table-container {
+  overflow: visible !important;
+  contain: none !important;
+  position: relative;
+  z-index: 5;
+  min-height: fit-content;
+  height: auto;
+  margin-top: 1rem;
+}
+
+/* Override parent container restrictions */
+.unified-form-container,
+.user-zone-content,
+form,
+.space-y-8 > div {
+  overflow: visible !important;
+}
+
+/* Specific override for crew sections */
+div[data-crew-section] {
+  overflow: visible !important;
+  contain: none !important;
+  min-height: fit-content !important;
+  height: auto !important;
+  z-index: 1 !important;
+  position: relative !important;
+}
+
+/* Enhanced table styling */
+.crew-table-container table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: visible !important;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive table wrapper */
+.crew-table-container .overflow-x-auto {
+  overflow-x: auto;
+  overflow-y: visible !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(252, 178, 131, 0.4) rgba(255, 255, 255, 0.1);
+}
+
+/* Custom scrollbar */
+.crew-table-container .overflow-x-auto::-webkit-scrollbar {
+  height: 8px;
+}
+
+.crew-table-container .overflow-x-auto::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.crew-table-container .overflow-x-auto::-webkit-scrollbar-thumb {
+  background: rgba(252, 178, 131, 0.4);
+  border-radius: 4px;
+}
+
+/* Mobile responsive improvements for crew management */
+@media (max-width: 768px) {
+  .crew-management-container {
+    padding: 1rem;
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+    border-radius: 0.5rem;
+  }
+  
+  .crew-table-container {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+  
+  .crew-table-container table {
+    font-size: 0.875rem;
+  }
+}

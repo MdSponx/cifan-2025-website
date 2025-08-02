@@ -1,0 +1,36 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Submissions folder - authenticated users can upload files
+    match /submissions/{submissionId}/{fileType}/{fileName} {
+      allow read, write: if request.auth != null;
+      allow delete: if request.auth != null && 
+        (request.auth.uid == resource.metadata.uploadedBy ||
+         get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin');
+    }
+    
+    // User profile images
+    match /users/{userId}/profile/{fileName} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // User profile images (alternative path)
+    match /profiles/{userId}/{fileName} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Public assets (read-only)
+    match /public/{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+    
+    // Site files (read-only for all, write for admin)
+    match /site_files/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null && 
+        get(/databases/(default)/documents/profiles/$(request.auth.uid)).data.role == 'admin';
+    }
+  }
+}
