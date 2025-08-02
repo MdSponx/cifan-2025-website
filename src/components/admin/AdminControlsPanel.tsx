@@ -166,8 +166,8 @@ const AdminControlsPanel: React.FC<AdminControlsPanelProps> = ({
   return (
     <div className="space-y-6 sm:space-y-8">
       
-      {/* Admin Controls Header */}
-      <div className="glass-container rounded-2xl p-6 sm:p-8">
+      {/* Admin Controls - Single Flexible Container */}
+      <div className="glass-container rounded-2xl p-6 sm:p-8 min-h-fit">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className={`text-xl ${getClass('header')} text-white mb-2 flex items-center space-x-2`}>
@@ -237,19 +237,23 @@ const AdminControlsPanel: React.FC<AdminControlsPanelProps> = ({
           </div>
         </div>
 
-        {/* Admin Notes */}
+        {/* Admin Notes Log */}
         <div className="mb-8">
           <h4 className={`${getClass('subtitle')} text-white mb-4 flex items-center space-x-2`}>
             <MessageSquare className="w-5 h-5 text-[#FCB283]" />
             <span>{currentContent.adminNotes}</span>
           </h4>
           
-          <div className="space-y-4">
+          {/* Add New Note - Moved to Top */}
+          <div className="space-y-4 mb-6">
+            <h5 className={`${getClass('body')} text-white/80 mb-3 text-sm`}>
+              {currentLanguage === 'th' ? 'เพิ่มบันทึกใหม่' : 'Add New Note'}
+            </h5>
             <textarea
               value={notes}
               onChange={(e) => handleNotesChange(e.target.value)}
               placeholder={currentContent.notesPlaceholder}
-              rows={6}
+              rows={4}
               className="w-full p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none resize-vertical"
             />
             
@@ -258,7 +262,7 @@ const AdminControlsPanel: React.FC<AdminControlsPanelProps> = ({
                 <AnimatedButton
                   variant="primary"
                   size="small"
-                  icon={<Save className="w-4 h-4" />}
+                  icon="💾"
                   onClick={handleSaveNotes}
                   className={isUpdating ? 'opacity-50 cursor-not-allowed' : ''}
                 >
@@ -266,6 +270,98 @@ const AdminControlsPanel: React.FC<AdminControlsPanelProps> = ({
                 </AnimatedButton>
               </div>
             )}
+          </div>
+
+          {/* Notes History/Log - Mock Data for UI Preview */}
+          <div className="mb-6">
+            <h5 className={`${getClass('body')} text-white/80 mb-3 text-sm`}>
+              {currentLanguage === 'th' ? 'บันทึกการทำงานของผู้ดูแล' : 'Admin Activity Log'}
+            </h5>
+            <div className="space-y-3">
+              {/* Mock Note 1 */}
+              <div className="glass-card p-4 rounded-xl border-l-4 border-blue-400">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold text-xs">
+                      JD
+                    </div>
+                    <div>
+                      <p className={`${getClass('body')} text-white font-medium text-sm`}>
+                        {currentLanguage === 'th' ? 'จอห์น โดว์' : 'John Doe'}
+                      </p>
+                      <p className={`text-xs ${getClass('body')} text-white/60`}>
+                        {currentLanguage === 'th' ? 'ผู้ดูแลระบบหลัก' : 'Senior Admin'}
+                      </p>
+                    </div>
+                  </div>
+                  <span className={`text-xs ${getClass('body')} text-white/60`}>
+                    {currentLanguage === 'th' ? '2 ชั่วโมงที่แล้ว' : '2 hours ago'}
+                  </span>
+                </div>
+                <p className={`${getClass('body')} text-white/90 text-sm leading-relaxed`}>
+                  {currentLanguage === 'th' 
+                    ? 'ได้ตรวจสอบเอกสารหลักฐานแล้ว ทุกอย่างครบถ้วนและถูกต้อง พร้อมส่งต่อให้คณะกรรมการตัดสินแล้ว'
+                    : 'Reviewed all documentation. Everything is complete and accurate. Ready to forward to the judging panel.'
+                  }
+                </p>
+              </div>
+
+              {/* Mock Note 2 */}
+              <div className="glass-card p-4 rounded-xl border-l-4 border-green-400">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center text-white font-bold text-xs">
+                      MS
+                    </div>
+                    <div>
+                      <p className={`${getClass('body')} text-white font-medium text-sm`}>
+                        {currentLanguage === 'th' ? 'มารี สมิธ' : 'Marie Smith'}
+                      </p>
+                      <p className={`text-xs ${getClass('body')} text-white/60`}>
+                        {currentLanguage === 'th' ? 'ผู้ประสานงาน' : 'Coordinator'}
+                      </p>
+                    </div>
+                  </div>
+                  <span className={`text-xs ${getClass('body')} text-white/60`}>
+                    {currentLanguage === 'th' ? '1 วันที่แล้ว' : '1 day ago'}
+                  </span>
+                </div>
+                <p className={`${getClass('body')} text-white/90 text-sm leading-relaxed`}>
+                  {currentLanguage === 'th' 
+                    ? 'ติดต่อผู้สมัครเพื่อขอเอกสารเพิ่มเติมแล้ว คาดว่าจะได้รับภายใน 2-3 วันทำการ'
+                    : 'Contacted applicant for additional documentation. Expected to receive within 2-3 business days.'
+                  }
+                </p>
+              </div>
+
+              {/* Mock Note 3 */}
+              <div className="glass-card p-4 rounded-xl border-l-4 border-purple-400">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-xs">
+                      RJ
+                    </div>
+                    <div>
+                      <p className={`${getClass('body')} text-white font-medium text-sm`}>
+                        {currentLanguage === 'th' ? 'โรเบิร์ต จอห์นสัน' : 'Robert Johnson'}
+                      </p>
+                      <p className={`text-xs ${getClass('body')} text-white/60`}>
+                        {currentLanguage === 'th' ? 'ผู้ตรวจสอบเทคนิค' : 'Technical Reviewer'}
+                      </p>
+                    </div>
+                  </div>
+                  <span className={`text-xs ${getClass('body')} text-white/60`}>
+                    {currentLanguage === 'th' ? '3 วันที่แล้ว' : '3 days ago'}
+                  </span>
+                </div>
+                <p className={`${getClass('body')} text-white/90 text-sm leading-relaxed`}>
+                  {currentLanguage === 'th' 
+                    ? 'ตรวจสอบคุณภาพไฟล์วิดีโอแล้ว ความละเอียดและรูปแบบไฟล์เป็นไปตามข้อกำหนด ไม่พบปัญหาด้านเทคนิค'
+                    : 'Video file quality check completed. Resolution and format meet requirements. No technical issues found.'
+                  }
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -280,7 +376,7 @@ const AdminControlsPanel: React.FC<AdminControlsPanelProps> = ({
             <AnimatedButton
               variant={application.flagged ? "outline" : "secondary"}
               size="medium"
-              icon={<Flag className="w-4 h-4" />}
+              icon="🚩"
               onClick={handleFlagToggle}
               className={`w-full ${application.flagged ? 'border-red-400 text-red-400' : ''}`}
             >
@@ -291,7 +387,7 @@ const AdminControlsPanel: React.FC<AdminControlsPanelProps> = ({
             <AnimatedButton
               variant="secondary"
               size="medium"
-              icon={<Download className="w-4 h-4" />}
+              icon="📥"
               onClick={onExport}
               className="w-full"
             >
@@ -302,7 +398,7 @@ const AdminControlsPanel: React.FC<AdminControlsPanelProps> = ({
             <AnimatedButton
               variant="secondary"
               size="medium"
-              icon={<Printer className="w-4 h-4" />}
+              icon="🖨️"
               onClick={onPrint}
               className="w-full"
             >
@@ -356,7 +452,7 @@ const AdminControlsPanel: React.FC<AdminControlsPanelProps> = ({
               <AnimatedButton
                 variant="primary"
                 size="medium"
-                icon={<Flag className="w-4 h-4" />}
+                icon="🚩"
                 onClick={handleConfirmFlag}
                 className={!flagReason.trim() ? 'opacity-50 cursor-not-allowed' : ''}
               >

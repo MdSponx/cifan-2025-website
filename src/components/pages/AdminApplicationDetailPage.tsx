@@ -438,6 +438,48 @@ const AdminApplicationDetailPage: React.FC<AdminApplicationDetailPageProps> = ({
     return null;
   };
 
+  const getDirectorInfo = () => {
+    if (!application) return null;
+    
+    // 1. Check dedicated director fields first
+    if ((application as any).directorName || (application as any).directorNameTh) {
+      return {
+        name: (application as any).directorName,
+        nameTh: (application as any).directorNameTh,
+        role: (application as any).directorRole,
+        customRole: (application as any).directorCustomRole
+      };
+    }
+    
+    // 2. Check if submitter is the director
+    const contactInfo = getContactInfo();
+    if (contactInfo.role === 'Director') {
+      return {
+        name: contactInfo.name,
+        nameTh: contactInfo.nameTh,
+        role: contactInfo.role,
+        customRole: contactInfo.customRole
+      };
+    }
+    
+    // 3. Search crew members for director
+    const director = application.crewMembers?.find((member: any) => 
+      member.role === 'Director'
+    );
+    
+    if (director) {
+      return {
+        name: director.fullName,
+        nameTh: director.fullNameTh,
+        role: director.role,
+        customRole: director.customRole
+      };
+    }
+    
+    // 4. Return null to trigger "Unknown" display
+    return null;
+  };
+
   const getFilteredAndSortedCrew = () => {
     if (!application?.crewMembers) return [];
     
@@ -802,6 +844,7 @@ const AdminApplicationDetailPage: React.FC<AdminApplicationDetailPageProps> = ({
 
   const contactInfo = getContactInfo();
   const educationalInfo = getEducationalInfo();
+  const directorInfo = getDirectorInfo();
   const filteredCrew = getFilteredAndSortedCrew();
   const averageScore = calculateAverageScore();
 
@@ -860,38 +903,31 @@ const AdminApplicationDetailPage: React.FC<AdminApplicationDetailPageProps> = ({
         nationality={(application as any).nationality || 'Unknown'}
         competitionCategory={application.competitionCategory}
         posterUrl={application.files.posterFile.url}
-        submitterName={contactInfo.name}
-        submitterNameTh={contactInfo.nameTh}
-        submitterRole={contactInfo.role}
-        customRole={contactInfo.customRole}
+        submitterName=""
+        submitterNameTh=""
+        submitterRole=""
+        customRole=""
         chiangmaiConnection={application.chiangmaiConnection}
+        directorName={directorInfo?.name}
+        directorNameTh={directorInfo?.nameTh}
+        directorRole={directorInfo?.role}
+        directorCustomRole={directorInfo?.customRole}
       />
 
       {/* 2. Video Player & Evaluation Container */}
-      <div className="glass-container rounded-2xl p-6 sm:p-8 overflow-hidden">
+      <div className="film-container-auto-expand rounded-2xl p-6 sm:p-8 container-push-down">
         <div className="flex items-center justify-between mb-6">
           <h3 className={`text-xl ${getClass('header')} text-white flex items-center space-x-2`}>
             <span>🎬</span>
             <span>{currentLanguage === 'th' ? 'ภาพยนตร์' : 'Film'}</span>
           </h3>
-          
-          {/* Average Score in Header - Using Mock Data for Preview */}
-          <div className="flex items-center space-x-2 px-4 py-2 glass-card rounded-lg">
-            <Star className="w-4 h-4 text-[#FCB283]" />
-            <span className={`text-lg ${getClass('header')} text-[#FCB283]`}>
-              41.7/50
-            </span>
-            <span className={`text-sm ${getClass('body')} text-white/60`}>
-              (3 {currentLanguage === 'th' ? 'คะแนน' : 'scores'})
-            </span>
-          </div>
         </div>
 
-        {/* Main Content Grid - Video/Comments Left (2/3) + Scoring Right (1/3) */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start min-w-0">
+        {/* Main Content - Auto-expanding grid */}
+        <div className="grid grid-cols-1 xl:grid-cols-5 gap-6 items-start">
           
-          {/* Left Column - Video & Comments (2/3 width) */}
-          <div className="xl:col-span-2 space-y-6 min-w-0">
+          {/* Left Section - Video & Comments (3/5 width) */}
+          <div className="xl:col-span-3 space-y-6">
             
             {/* Video Player */}
             <div className="relative bg-black rounded-xl overflow-hidden">
@@ -930,13 +966,26 @@ const AdminApplicationDetailPage: React.FC<AdminApplicationDetailPageProps> = ({
 
             {/* Admin Comments Section */}
             <div className="space-y-4">
-              <h4 className={`text-lg ${getClass('header')} text-white flex items-center space-x-2`}>
-                <MessageSquare className="w-5 h-5 text-[#FCB283]" />
-                <span>{currentLanguage === 'th' ? 'ความคิดเห็นและคะแนนจากคณะกรรมการ' : 'Jury Comments & Scores'}</span>
-              </h4>
+              <div className="flex items-center justify-between">
+                <h4 className={`text-lg ${getClass('header')} text-white flex items-center space-x-2`}>
+                  <MessageSquare className="w-5 h-5 text-[#FCB283]" />
+                  <span>{currentLanguage === 'th' ? 'ความคิดเห็นและคะแนนจากคณะกรรมการ' : 'Jury Comments & Scores'}</span>
+                </h4>
+                
+                {/* Average Score - Using Mock Data for Preview */}
+                <div className="flex items-center space-x-2 px-4 py-2 glass-card rounded-lg">
+                  <Star className="w-4 h-4 text-[#FCB283]" />
+                  <span className={`text-lg ${getClass('header')} text-[#FCB283]`}>
+                    41.7/50
+                  </span>
+                  <span className={`text-sm ${getClass('body')} text-white/60`}>
+                    (3 {currentLanguage === 'th' ? 'คะแนน' : 'scores'})
+                  </span>
+                </div>
+              </div>
               
-              {/* Mock Admin Comments */}
-              <div className="space-y-4">
+              {/* Comments List - Remove max-height and overflow */}
+              <div className="space-y-4 comments-list-full">
                 {/* Mock Comment 1 */}
                 <div className="glass-card p-4 rounded-xl">
                   <div className="flex items-start space-x-4">
@@ -955,7 +1004,7 @@ const AdminApplicationDetailPage: React.FC<AdminApplicationDetailPageProps> = ({
                         </div>
                         <div className="flex items-center space-x-2">
                           <Star className="w-4 h-4 text-[#FCB283]" />
-                          <span className={`text-sm ${getClass('body')} text-[#FCB283] font-medium`}>42/50</span>
+                          <span className={`text-sm ${getClass('body')} text-[#FCB283] font-medium`}>42/50 (84%)</span>
                         </div>
                       </div>
                       <p className={`${getClass('body')} text-white/90 text-sm leading-relaxed`}>
@@ -986,7 +1035,7 @@ const AdminApplicationDetailPage: React.FC<AdminApplicationDetailPageProps> = ({
                         </div>
                         <div className="flex items-center space-x-2">
                           <Star className="w-4 h-4 text-[#FCB283]" />
-                          <span className={`text-sm ${getClass('body')} text-[#FCB283] font-medium`}>38/50</span>
+                          <span className={`text-sm ${getClass('body')} text-[#FCB283] font-medium`}>38/50 (76%)</span>
                         </div>
                       </div>
                       <p className={`${getClass('body')} text-white/90 text-sm leading-relaxed`}>
@@ -1017,7 +1066,7 @@ const AdminApplicationDetailPage: React.FC<AdminApplicationDetailPageProps> = ({
                         </div>
                         <div className="flex items-center space-x-2">
                           <Star className="w-4 h-4 text-[#FCB283]" />
-                          <span className={`text-sm ${getClass('body')} text-[#FCB283] font-medium`}>45/50</span>
+                          <span className={`text-sm ${getClass('body')} text-[#FCB283] font-medium`}>45/50 (90%)</span>
                         </div>
                       </div>
                       <p className={`${getClass('body')} text-white/90 text-sm leading-relaxed`}>
@@ -1029,26 +1078,86 @@ const AdminApplicationDetailPage: React.FC<AdminApplicationDetailPageProps> = ({
                     </div>
                   </div>
                 </div>
+
+                {/* Mock Comment 4 */}
+                <div className="glass-card p-4 rounded-xl">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center text-white font-bold">
+                      SK
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <h5 className={`${getClass('subtitle')} text-white font-medium`}>
+                            {currentLanguage === 'th' ? 'คุณสุรีย์ กิตติชัย' : 'Sarah Kim'}
+                          </h5>
+                          <p className={`text-xs ${getClass('body')} text-white/60`}>
+                            {currentLanguage === 'th' ? 'ผู้อำนวยการสร้าง' : 'Executive Producer'}
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Star className="w-4 h-4 text-[#FCB283]" />
+                          <span className={`text-sm ${getClass('body')} text-[#FCB283] font-medium`}>40/50 (80%)</span>
+                        </div>
+                      </div>
+                      <p className={`${getClass('body')} text-white/90 text-sm leading-relaxed`}>
+                        {currentLanguage === 'th' 
+                          ? 'การผลิตที่มีคุณภาพดี แสดงให้เห็นถึงความพยายามและความตั้งใจของทีมงาน อย่างไรก็ตาม การพัฒนาตัวละครยังมีที่ปรับปรุงได้ และควรให้ความสำคัญกับการสร้างอารมณ์ให้มากขึ้น'
+                          : 'Well-produced film showing the team\'s dedication and effort. However, character development could be improved, and more attention should be given to emotional depth and atmosphere building.'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mock Comment 5 */}
+                <div className="glass-card p-4 rounded-xl">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold">
+                      RT
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <h5 className={`${getClass('subtitle')} text-white font-medium`}>
+                            {currentLanguage === 'th' ? 'อาจารย์รัชนี ธนาวัฒน์' : 'Robert Thompson'}
+                          </h5>
+                          <p className={`text-xs ${getClass('body')} text-white/60`}>
+                            {currentLanguage === 'th' ? 'ผู้เชี่ยวชาญด้านการตัดต่อ' : 'Post-Production Specialist'}
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Star className="w-4 h-4 text-[#FCB283]" />
+                          <span className={`text-sm ${getClass('body')} text-[#FCB283] font-medium`}>43/50 (86%)</span>
+                        </div>
+                      </div>
+                      <p className={`${getClass('body')} text-white/90 text-sm leading-relaxed`}>
+                        {currentLanguage === 'th' 
+                          ? 'การตัดต่อที่ลื่นไหลและมีจังหวะที่ดี การใช้เสียงประกอบและดนตรีเข้ากับภาพได้อย่างลงตัว แต่บางช่วงการเปลี่ยนฉากค่อนข้างกะทันหัน ควรมีการเชื่อมโยงที่นุ่มนวลกว่านี้'
+                          : 'Smooth editing with good pacing. Sound design and music complement the visuals well. However, some scene transitions feel abrupt and could benefit from smoother connections between sequences.'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column - Scoring Panel (1/3 width) */}
-          <div className="xl:col-span-1 min-w-0 w-full">
-            <div className="w-full max-w-full">
-              <VideoScoringPanel
-                applicationId={application.id}
-                currentScores={application.scores?.find(score => score.adminId === user?.uid)}
-                allScores={application.scores || []}
-                onScoreChange={(scores) => {
-                  // Handle score changes if needed
-                  console.log('Score changed:', scores);
-                }}
-                onSaveScores={handleSaveScore}
-                isSubmitting={isSubmitting}
-                className="w-full max-w-full overflow-hidden"
-              />
-            </div>
+          {/* Right Section - Scoring Panel (2/5 width) */}
+          <div className="xl:col-span-2">
+            <VideoScoringPanel
+              applicationId={application.id}
+              currentScores={application.scores?.find(score => score.adminId === user?.uid)}
+              allScores={application.scores || []}
+              onScoreChange={(scores) => {
+                // Handle score changes if needed
+                console.log('Score changed:', scores);
+              }}
+              onSaveScores={handleSaveScore}
+              isSubmitting={isSubmitting}
+              className="scoring-panel-full-height"
+            />
           </div>
         </div>
       </div>
@@ -1095,15 +1204,48 @@ const AdminApplicationDetailPage: React.FC<AdminApplicationDetailPageProps> = ({
             <h4 className={`text-sm ${getClass('subtitle')} text-white/80 mb-4`}>
               {currentLanguage === 'th' ? 'ข้อมูลติดต่อ' : 'Contact Information'}
             </h4>
-            <div className="space-y-3">
-              <InfoRow
-                label={currentLanguage === 'th' ? 'อีเมล' : 'Email'}
-                value={contactInfo.email}
-              />
-              <InfoRow
-                label={currentLanguage === 'th' ? 'โทรศัพท์' : 'Phone'}
-                value={contactInfo.phone}
-              />
+            <div className="space-y-4">
+              {/* Email with Quick Action */}
+              <div>
+                <label className={`text-sm ${getClass('body')} text-white/60`}>
+                  {currentLanguage === 'th' ? 'อีเมล' : 'Email'}
+                </label>
+                <div className="flex items-center justify-between mt-1">
+                  <p className={`${getClass('body')} text-white flex-1`}>
+                    {contactInfo.email || '-'}
+                  </p>
+                  {contactInfo.email && (
+                    <a
+                      href={`mailto:${contactInfo.email}`}
+                      className="ml-3 flex items-center space-x-1 px-2 py-1 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors text-xs"
+                    >
+                      <Mail className="w-3 h-3" />
+                      <span>{currentLanguage === 'th' ? 'อีเมล' : 'Email'}</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              {/* Phone with Quick Action */}
+              <div>
+                <label className={`text-sm ${getClass('body')} text-white/60`}>
+                  {currentLanguage === 'th' ? 'โทรศัพท์' : 'Phone'}
+                </label>
+                <div className="flex items-center justify-between mt-1">
+                  <p className={`${getClass('body')} text-white flex-1`}>
+                    {contactInfo.phone || '-'}
+                  </p>
+                  {contactInfo.phone && (
+                    <a
+                      href={`tel:${contactInfo.phone}`}
+                      className="ml-3 flex items-center space-x-1 px-2 py-1 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 transition-colors text-xs"
+                    >
+                      <Phone className="w-3 h-3" />
+                      <span>{currentLanguage === 'th' ? 'โทร' : 'Call'}</span>
+                    </a>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1417,6 +1559,23 @@ const AdminApplicationDetailPage: React.FC<AdminApplicationDetailPageProps> = ({
 
               {application.files.proofFile.url && (
                 <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      // Check if it's a PDF and implement preview logic
+                      const isPDF = application.files.proofFile?.name.toLowerCase().endsWith('.pdf');
+                      if (isPDF) {
+                        // For PDF, open in new tab for now (can be enhanced with modal viewer)
+                        window.open(application.files.proofFile.url, '_blank');
+                      } else {
+                        // For images, use the existing preview modal
+                        setSelectedFilePreview(application.files.proofFile.url);
+                      }
+                    }}
+                    className="flex items-center space-x-1 px-3 py-2 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 transition-colors text-xs"
+                  >
+                    <Eye className="w-3 h-3" />
+                    <span>{currentLanguage === 'th' ? 'ดู' : 'View'}</span>
+                  </button>
                   <button
                     onClick={() => handleFileDownload(application.files.proofFile.url, application.files.proofFile.name)}
                     className="flex items-center space-x-1 px-3 py-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors text-xs"

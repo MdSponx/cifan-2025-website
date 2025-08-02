@@ -23,6 +23,10 @@ interface CompactFilmInfoProps {
   submitterRole: string;
   customRole?: string;
   chiangmaiConnection?: string;
+  directorName?: string;
+  directorNameTh?: string;
+  directorRole?: string;
+  directorCustomRole?: string;
 }
 
 const CompactFilmInfo: React.FC<CompactFilmInfoProps> = ({
@@ -39,7 +43,11 @@ const CompactFilmInfo: React.FC<CompactFilmInfoProps> = ({
   submitterNameTh,
   submitterRole,
   customRole,
-  chiangmaiConnection
+  chiangmaiConnection,
+  directorName,
+  directorNameTh,
+  directorRole,
+  directorCustomRole
 }) => {
   const { i18n } = useTranslation();
   const { getClass } = useTypography();
@@ -85,8 +93,25 @@ const CompactFilmInfo: React.FC<CompactFilmInfoProps> = ({
 
   const displayTitle = currentLanguage === 'th' && filmTitleTh ? filmTitleTh : filmTitle;
   const alternativeTitle = currentLanguage === 'th' ? filmTitle : filmTitleTh;
-  const displaySubmitterName = currentLanguage === 'th' && submitterNameTh ? submitterNameTh : submitterName;
-  const displayRole = submitterRole === 'Other' ? customRole : submitterRole;
+  
+  // Display Director's name if available, otherwise show "Unknown"
+  const displayDirectorName = (() => {
+    if (directorName || directorNameTh) {
+      return currentLanguage === 'th' && directorNameTh ? directorNameTh : directorName;
+    }
+    return currentLanguage === 'th' ? 'ไม่ทราบ' : 'Unknown';
+  })();
+  
+  const displayRole = (() => {
+    if (directorRole) {
+      return directorRole === 'Other' ? directorCustomRole : directorRole;
+    }
+    // Only show role if we have director info, otherwise don't show role for "Unknown"
+    if (directorName || directorNameTh) {
+      return null;
+    }
+    return null;
+  })();
 
   return (
     <div className="glass-container rounded-2xl p-6 space-y-6">
@@ -145,7 +170,7 @@ const CompactFilmInfo: React.FC<CompactFilmInfoProps> = ({
               <div className="flex items-center space-x-2 text-white/80 mb-4">
                 <User className="w-4 h-4 text-[#FCB283]" />
                 <span className={`text-sm ${getClass('body')}`}>
-                  {displaySubmitterName}
+                  {displayDirectorName}
                 </span>
                 {displayRole && (
                   <>

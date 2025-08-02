@@ -1212,3 +1212,50 @@ div[data-crew-section] {
     font-size: 0.875rem;
   }
 }
+
+/* Container that expands with content */
+.film-container-auto-expand {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 48, 90, 0.3);
+  isolation: isolate;
+  position: relative;
+  contain: layout style;
+  min-height: fit-content;
+  height: auto;
+  overflow: visible; /* Show all content */
+}
+
+/* Comments without scroll */
+.comments-list-full {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: auto;
+  min-height: fit-content;
+  /* NO max-height or overflow constraints */
+}
+
+/* Scoring panel without height limits */
+.scoring-panel-full-height {
+  height: auto;
+  min-height: fit-content;
+  overflow: visible;
+  /* Remove all scroll constraints */
+}
+
+/* Remove scroll constraints utility */
+.no-scroll-constraint {
+  max-height: none !important;
+  overflow: visible !important;
+  height: auto !important;
+  min-height: fit-content !important;
+}
+
+/* Container that pushes content down */
+.container-push-down {
+  margin-bottom: 2rem;
+  min-height: fit-content;
+  height: auto;
+}

@@ -147,7 +147,6 @@ const VideoScoringPanel: React.FC<VideoScoringPanelProps> = ({
       story: 0,
       creativity: 0,
       chiangmai: 0,
-      chiangmai: currentScores?.chiangmai || 0,
       overall: 0,
       comments: ''
     });
@@ -191,31 +190,31 @@ const VideoScoringPanel: React.FC<VideoScoringPanelProps> = ({
           </button>
         ))}
         <span className={`ml-3 text-lg font-bold ${getScoreColor(value)} ${getClass('header')}`}>
-          {value}/10
+          {value}/10 ({Math.round((value / 10) * 100)}%)
         </span>
       </div>
     );
   };
 
   return (
-    <div className={`glass-container rounded-2xl p-6 sm:p-8 ${className}`}>
+    <div className={`glass-container rounded-2xl p-4 sm:p-6 ${className}`}>
       
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className={`text-xl ${getClass('header')} text-white mb-2 flex items-center space-x-2`}>
-            <Star className="w-6 h-6 text-[#FCB283]" />
+          <h3 className={`text-lg ${getClass('header')} text-white mb-1 flex items-center space-x-2`}>
+            <Star className="w-5 h-5 text-[#FCB283]" />
             <span>{currentContent.title}</span>
           </h3>
-          <p className={`${getClass('body')} text-white/70 text-sm`}>
+          <p className={`${getClass('body')} text-white/70 text-xs`}>
             {currentContent.subtitle}
           </p>
         </div>
         
         {/* Total Score Display */}
         <div className="text-center">
-          <div className={`text-3xl ${getClass('header')} ${getScoreColor(totalScore / 4)} mb-1`}>
-            {totalScore}/50 ({totalPercentage}%)
+          <div className={`text-2xl ${getClass('header')} ${getScoreColor(totalScore / 4)} mb-1`}>
+            {totalScore}/50 ({Math.round((totalScore / 50) * 100)}%)
           </div>
           <p className={`text-xs ${getClass('body')} text-white/60`}>
             {currentContent.totalScore}
@@ -224,9 +223,9 @@ const VideoScoringPanel: React.FC<VideoScoringPanelProps> = ({
       </div>
 
       {/* Scoring Criteria */}
-      <div className="space-y-6 mb-8">
+      <div className="space-y-4 mb-6">
         {criteriaInfo.map((criterion) => (
-          <div key={criterion.key} className="glass-card p-4 rounded-xl">
+          <div key={criterion.key} className="glass-card p-3 rounded-xl">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">{criterion.icon}</span>
@@ -297,8 +296,8 @@ const VideoScoringPanel: React.FC<VideoScoringPanelProps> = ({
             </div>
           </div>
 
-          {/* Individual Scores */}
-          <div className="mt-4 space-y-2 max-h-40 overflow-y-auto">
+          {/* Individual Scores - Show all without scroll */}
+          <div className="mt-4 space-y-2">
             {allScores.map((score, index) => (
               <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                 <div>
@@ -325,25 +324,31 @@ const VideoScoringPanel: React.FC<VideoScoringPanelProps> = ({
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 justify-end">
-        <AnimatedButton
-          variant="outline"
-          size="medium"
-          icon={<RotateCcw className="w-4 h-4" />}
+        <button
           onClick={handleResetScores}
-          className={hasChanges ? '' : 'opacity-50 cursor-not-allowed'}
+          disabled={!hasChanges}
+          className={`flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors ${
+            hasChanges 
+              ? 'border-white/20 text-white hover:bg-white/10' 
+              : 'border-white/10 text-white/50 cursor-not-allowed'
+          }`}
         >
-          {currentContent.resetScores}
-        </AnimatedButton>
+          <RotateCcw className="w-4 h-4" />
+          <span>{currentContent.resetScores}</span>
+        </button>
         
-        <AnimatedButton
-          variant="primary"
-          size="medium"
-          icon={<Save className="w-4 h-4" />}
+        <button
           onClick={handleSaveScores}
-          className={(!hasChanges || isSubmitting) ? 'opacity-50 cursor-not-allowed' : ''}
+          disabled={!hasChanges || isSubmitting}
+          className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+            hasChanges && !isSubmitting
+              ? 'bg-gradient-to-r from-[#AA4626] to-[#FCB283] text-white hover:from-[#FCB283] hover:to-[#AA4626]'
+              : 'bg-white/10 text-white/50 cursor-not-allowed'
+          }`}
         >
-          {isSubmitting ? currentContent.saving : currentContent.saveScores}
-        </AnimatedButton>
+          <Save className="w-4 h-4" />
+          <span>{isSubmitting ? currentContent.saving : currentContent.saveScores}</span>
+        </button>
       </div>
     </div>
   );
