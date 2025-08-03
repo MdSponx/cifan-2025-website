@@ -87,6 +87,12 @@ const SubmissionProgress: React.FC<SubmissionProgressProps> = ({
 
       {/* File Upload Progress */}
       {progress.fileProgress && progress.stage === 'uploading' && (
+        <>
+          {/* Auto-scroll to top when uploading starts */}
+          {React.useEffect(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, [])}
+          
         <div className="space-y-4">
           <h4 className={`${getClass('subtitle')} text-white mb-3`}>
             {currentLanguage === 'th' ? 'ความคืบหน้าการอัปโหลด' : 'Upload Progress'}
@@ -136,6 +142,7 @@ const SubmissionProgress: React.FC<SubmissionProgressProps> = ({
             );
           })}
         </div>
+        </>
       )}
 
       {/* Error Details */}

@@ -349,6 +349,9 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Scroll to top when submission starts
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     // For draft saving, we don't need strict validation
     const errors = validateForm();
     
