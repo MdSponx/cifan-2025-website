@@ -832,113 +832,105 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
                   {currentContent.submitterName} <span className="text-red-400">*</span>
                 </label>
                 <input
-        </FormSection>
-
-        {/* Section 3: Crew Management */}
-        <CrewManagement
-          crewMembers={application.crewMembers}
-          onCrewMembersChange={handleCrewMembersChange}
-          isThaiNationality={isThaiNationality}
-          submitterSchoolName={application.schoolName}
-          submitterUniversityName={application.universityName}
-          error={formErrors.crewMembers}
-          isWorldForm={isWorldCategory}
-          className="w-full"
-          competitionCategory={application.competitionCategory}
-        />
-
-        {/* Section 4: File Management */}
-        <FormSection title={currentContent.filesTitle} icon="📁" className="w-full">
-            <div className="space-y-6">
-              <UnifiedFileUpload
-                mode="replace"
-                name="filmFile"
-                label={currentLanguage === 'th' ? 'ไฟล์ภาพยนตร์' : 'Film File'}
-                accept=".mp4,.mov"
-                fileType="VIDEO"
-                applicationId={application.id}
-                currentFileName={application.files.filmFile.fileName}
-                onFileReplaced={(newFileMetadata: any) => handleFileReplaced('filmFile', newFileMetadata)}
-                onError={(error: string) => setError(error)}
-              />
+                  type="text"
+                  value={application.submitterName || ''}
+                  onChange={(e) => handleInputChange('submitterName', e.target.value)}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterName ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                />
+                <ErrorMessage error={formErrors.submitterName} />
+              </div>
               
-              <UnifiedFileUpload
-                mode="replace"
-                name="posterFile"
-                label={currentLanguage === 'th' ? 'โปสเตอร์ภาพยนตร์' : 'Film Poster'}
-                accept=".jpg,.jpeg,.png"
-                fileType="IMAGE"
-                applicationId={application.id}
-                currentFileName={application.files.posterFile.fileName}
-                onFileReplaced={(newFileMetadata: any) => handleFileReplaced('posterFile', newFileMetadata)}
-                onError={(error: string) => setError(error)}
-              />
+              <div>
+                <label className={`block text-white/90 ${getClass('body')} mb-2`}>
+                  {currentContent.submitterNameTh} {isThaiNationality && <span className="text-red-400">*</span>}
+                </label>
+                <input
+                  type="text"
+                  value={application.submitterNameTh || ''}
+                  onChange={(e) => handleInputChange('submitterNameTh', e.target.value)}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterNameTh ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                />
+                <ErrorMessage error={formErrors.submitterNameTh} />
+              </div>
               
-              <UnifiedFileUpload
-                mode="replace"
-                name="proofFile"
-                label={currentLanguage === 'th' ? 'หลักฐาน' : 'Proof Document'}
-                accept={application.competitionCategory === 'youth' ? ".pdf,.jpg,.jpeg,.png" : "image/*,.pdf"}
-                fileType="DOCUMENT"
-                applicationId={application.id}
-                currentFileName={application.files.proofFile?.fileName || 'No proof file'}
-                onFileReplaced={(newFileMetadata: any) => handleFileReplaced('proofFile', newFileMetadata)}
-                onError={(error: string) => setError(error)}
-              />
+              <div>
+                <label className={`block text-white/90 ${getClass('body')} mb-2`}>
+                  {currentContent.age} <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="number"
+                  value={application.submitterAge || ''}
+                  onChange={(e) => handleInputChange('submitterAge', parseInt(e.target.value) || 0)}
+                  min="1"
+                  max="100"
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterAge ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                />
+                <ErrorMessage error={formErrors.submitterAge} />
+              </div>
+              
+              <div>
+                <label className={`block text-white/90 ${getClass('body')} mb-2`}>
+                  {currentContent.phone} <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="tel"
+                  value={application.submitterPhone || ''}
+                  onChange={(e) => handleInputChange('submitterPhone', e.target.value)}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterPhone ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                />
+                <ErrorMessage error={formErrors.submitterPhone} />
+              </div>
+              
+              <div>
+                <label className={`block text-white/90 ${getClass('body')} mb-2`}>
+                  {currentContent.email} <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="email"
+                  value={application.submitterEmail || ''}
+                  onChange={(e) => handleInputChange('submitterEmail', e.target.value)}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterEmail ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                />
+                <ErrorMessage error={formErrors.submitterEmail} />
+              </div>
+              
+              <div>
+                <label className={`block text-white/90 ${getClass('body')} mb-2`}>
+                  {currentContent.roleInFilm} <span className="text-red-400">*</span>
+                </label>
+                <select
+                  value={application.submitterRole || ''}
+                  onChange={(e) => handleInputChange('submitterRole', e.target.value)}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterRole ? 'border-red-400 error-field' : 'border-white/20'} text-white focus:border-[#FCB283] focus:outline-none`}
+                >
+                  <option value="">{currentContent.selectRole}</option>
+                  <option value="director">{currentLanguage === 'th' ? 'ผู้กำกับ' : 'Director'}</option>
+                  <option value="producer">{currentLanguage === 'th' ? 'ผู้ผลิต' : 'Producer'}</option>
+                  <option value="screenwriter">{currentLanguage === 'th' ? 'นักเขียนบท' : 'Screenwriter'}</option>
+                  <option value="cinematographer">{currentLanguage === 'th' ? 'ผู้กำกับภาพ' : 'Cinematographer'}</option>
+                  <option value="editor">{currentLanguage === 'th' ? 'บรรณาธิการ' : 'Editor'}</option>
+                  <option value="other">{currentLanguage === 'th' ? 'อื่นๆ' : 'Other'}</option>
+                </select>
+                <ErrorMessage error={formErrors.submitterRole} />
+              </div>
+              
+              {application.submitterRole === 'other' && (
+                <div>
+                  <label className={`block text-white/90 ${getClass('body')} mb-2`}>
+                    {currentContent.specifyRole} <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={application.submitterCustomRole || ''}
+                    onChange={(e) => handleInputChange('submitterCustomRole', e.target.value)}
+                    className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterCustomRole ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                  />
+                  <ErrorMessage error={formErrors.submitterCustomRole} />
+                </div>
+              )}
             </div>
         </FormSection>
 
-        {/* Action Buttons */}
-        <div className="flex justify-between items-center pt-8">
-          {/* Delete Button - Left */}
-          <AnimatedButton
-            variant="outline"
-            size="large"
-            icon="🗑️"
-            onClick={() => {
-              const confirmed = window.confirm(
-                currentLanguage === 'th' 
-                  ? 'คุณแน่ใจหรือไม่ที่จะลบใบสมัครนี้?'
-                  : 'Are you sure you want to delete this application?'
-              );
-              if (confirmed) {
-                // TODO: Implement delete functionality
-                console.log('Delete application');
-              }
-            }}
-            className={saving ? 'opacity-50 cursor-not-allowed' : ''}
-          >
-            {currentContent.deleteButton}
-          </AnimatedButton>
-
-          {/* Save Button - Right */}
-          <AnimatedButton
-            variant="primary"
-            size="large"
-            icon="💾"
-            onClick={handleSave}
-            disabled={saving}
-            className={`${getClass('menu')} ${saving ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            {saving ? currentContent.saving : currentContent.saveButton}
-          </AnimatedButton>
-        </div>
-      </div>
-
-      {/* Draft Success Dialog */}
-      <DraftSuccessDialog
-        isOpen={showDraftSuccessDialog}
-        onClose={handleCloseDraftDialog}
-        onSubmitNow={handleSubmitNow}
-        onReviewLater={handleReviewLater}
-        applicationId={savedApplicationId}
-        isDraft={true}
-      />
-    </div>
-  );
-};
-
-export default ApplicationEditPage;
         {/* Section 3: Crew Management */}
         <CrewManagement
           crewMembers={application.crewMembers}
