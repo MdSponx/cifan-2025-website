@@ -231,10 +231,10 @@ const ApplicationLayout: React.FC<ApplicationLayoutProps> = ({ application }) =>
                     }
                   }}
                 />
-                      📧 {(application as any).submitterEmail}
+              ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center text-white/60">
                   <div className="text-4xl mb-2">🖼️</div>
-                      📱 {(application as any).submitterPhone}
+                  <div className="text-sm text-center px-4">
                     {currentLanguage === 'th' ? 'ไม่มีโปสเตอร์' : 'No poster available'}
                   </div>
                 </div>

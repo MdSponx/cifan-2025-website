@@ -727,7 +727,6 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
                   <ErrorMessage error={formErrors.submitterCustomRole} />
                 </div>
               )}
-              </div>
               
               {/* Education Fields */}
               {category === 'youth' && (
