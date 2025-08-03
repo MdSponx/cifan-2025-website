@@ -404,6 +404,9 @@ const CrewManagement: React.FC<CrewManagementProps> = ({
             <div>
               <label className={`block text-white/90 ${getClass('body')} mb-2`}>
                 {currentContent.submitterName} <span className="text-red-400">*</span>
+                <span className="text-white/60 text-xs block mt-1">
+                  {currentLanguage === 'th' ? 'เป็นภาษาอังกฤษ' : 'In English'}
+                </span>
               </label>
               <input
                 type="text"
@@ -415,22 +418,21 @@ const CrewManagement: React.FC<CrewManagementProps> = ({
               <ErrorMessage error={crewFormErrors.fullName} />
             </div>
             
-            {/* Thai Name for crew - only for Thai nationality */}
-            {isThaiNationality && (
-              <div>
-                <label className={`block text-white/90 ${getClass('body')} mb-2`}>
-                  {currentContent.submitterNameTh} {currentContent.optional}
-                </label>
-                <input
-                  type="text"
-                  name="fullNameTh"
-                  value={crewFormData.fullNameTh}
-                  onChange={handleCrewInputChange}
-                  className={`w-full p-3 rounded-lg bg-white/10 border ${crewFormErrors.fullNameTh ? 'border-red-400' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
-                />
-                <ErrorMessage error={crewFormErrors.fullNameTh} />
-              </div>
-            )}
+            {/* Thai Name for crew - always show as optional */}
+            <div>
+              <label className={`block text-white/90 ${getClass('body')} mb-2`}>
+                {currentContent.submitterNameTh} {currentContent.optional}
+              </label>
+              <input
+                type="text"
+                name="fullNameTh"
+                value={crewFormData.fullNameTh}
+                onChange={handleCrewInputChange}
+                className={`w-full p-3 rounded-lg bg-white/10 border ${crewFormErrors.fullNameTh ? 'border-red-400' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                placeholder={currentLanguage === 'th' ? 'ชื่อ-นามสกุลภาษาไทย (ไม่บังคับ)' : 'Full name in Thai (optional)'}
+              />
+              <ErrorMessage error={crewFormErrors.fullNameTh} />
+            </div>
             
             <div>
               <label className={`block text-white/90 ${getClass('body')} mb-2`}>
