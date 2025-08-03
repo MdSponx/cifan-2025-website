@@ -235,6 +235,63 @@ export class SubmissionService {
   }
 
   /**
+   * Saves a world form as draft (with conditional file uploads)
+   */
+  async saveDraftWorldForm(formData: WorldFormData): Promise<SubmissionResult> {
+    try {
+      this.submissionId = `world_draft_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      this.updateProgress('validating', 0, 'Validating draft data...');
+      await this.validateFormData(formData, true);
+
+      // Stage 2: Conditional file upload for drafts
+      let fileMetadata: { [key: string]: FileMetadata } | null = null;
+      
+      // Check if any files exist in formData
+      const hasFiles = formData.filmFile || formData.posterFile || formData.proofFile;
+      
+      if (hasFiles) {
+        this.updateProgress('uploading', 20, 'Uploading files...');
+        fileMetadata = await this.uploadFilesForDraft(formData, this.submissionId);
+        this.updateProgress('saving', 70, 'Saving draft with files...');
+      } else {
+        this.updateProgress('saving', 50, 'Saving draft...');
+      }
+
+      // Stage 3: Save to Firestore with or without files
+      const docRef = await this.saveDraftToFirestore('world', formData, fileMetadata);
+
+      this.updateProgress('complete', 100, 'Draft saved successfully!');
+
+      return {
+        success: true,
+        submissionId: docRef.id,
+        isDraft: true
+      };
+
+    } catch (error) {
+      console.error('Draft save error:', error);
+      await this.cleanup();
+
+      const submissionError = error as SubmissionError | FileUploadError;
+      this.updateProgress('error', 0, submissionError.message);
+
+      // Provide specific guidance for Firebase Storage permission errors
+      let errorMessage = submissionError.message;
+      if (submissionError.code === 'storage-unauthorized') {
+        errorMessage = 'Firebase Storage permission error. Please ensure Storage rules allow read/write access. Contact support if this persists.';
+      }
+
+      return {
+        success: false,
+        error: errorMessage,
+        errorCode: submissionError.code || 'unknown-error',
+        isDraft: true
+      };
+    }
+  }
+
+  /**
    * Submits a future form with file uploads
    */
   async submitFutureForm(formData: FutureFormData): Promise<SubmissionResult> {
