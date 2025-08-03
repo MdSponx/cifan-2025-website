@@ -491,7 +491,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
                 
                 return (
                   <span
-                    key={index}
+                    key={language}
                     className="inline-flex items-center space-x-2 px-3 py-1 bg-[#FCB283]/20 text-[#FCB283] rounded-full text-sm border border-[#FCB283]/30"
                   >
                     <span>{flag}</span>
