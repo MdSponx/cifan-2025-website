@@ -104,6 +104,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
   const [showCountrySuggestions, setShowCountrySuggestions] = useState(false);
   const [showOtherLanguageInput, setShowOtherLanguageInput] = useState(false);
   const [customLanguage, setCustomLanguage] = useState('');
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>(filmLanguages || ['Thai']);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -244,16 +245,27 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
     };
   }, [showCountrySuggestions]);
 
+  // Sync with parent prop changes
+  useEffect(() => {
+    if (filmLanguages && JSON.stringify(filmLanguages) !== JSON.stringify(selectedLanguages)) {
+      setSelectedLanguages(filmLanguages);
+    }
+  }, [filmLanguages]);
+
   // Initialize with Thai nationality on mount
   useEffect(() => {
     onNationalityChange('Thailand');
     onNationalityTypeChange(true);
-    onFilmLanguagesChange(['Thai']);
+    if (!filmLanguages || filmLanguages.length === 0) {
+      const initialLanguages = ['Thai'];
+      setSelectedLanguages(initialLanguages);
+      onFilmLanguagesChange(initialLanguages);
+    }
   }, [onNationalityChange, onNationalityTypeChange, onFilmLanguagesChange]);
 
   // Handle language selection
   const handleLanguageToggle = (languageValue: string) => {
-    const currentLanguages = [...(filmLanguages || [])];
+    const currentLanguages = [...selectedLanguages];
     const index = currentLanguages.indexOf(languageValue);
     
     if (index > -1) {
@@ -264,15 +276,17 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
       currentLanguages.push(languageValue);
     }
     
+    setSelectedLanguages(currentLanguages);
     onFilmLanguagesChange(currentLanguages);
   };
 
   const handleOtherLanguageToggle = () => {
     if (showOtherLanguageInput) {
       // Remove custom languages and hide input
-      const standardLanguages = (filmLanguages || []).filter(lang => 
+      const standardLanguages = selectedLanguages.filter(lang => 
         majorLanguages.find(option => option.value === lang)
       );
+      setSelectedLanguages(standardLanguages);
       onFilmLanguagesChange(standardLanguages);
       setShowOtherLanguageInput(false);
       setCustomLanguage('');
@@ -284,24 +298,25 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
 
   const handleCustomLanguageAdd = () => {
     if (customLanguage.trim()) {
-      const currentLanguages = [...(filmLanguages || [])];
+      const currentLanguages = [...selectedLanguages];
       // Remove any existing custom languages first
       const standardLanguages = currentLanguages.filter(lang => 
         majorLanguages.find(option => option.value === lang)
       );
       // Add the new custom language
       standardLanguages.push(customLanguage.trim());
+      setSelectedLanguages(standardLanguages);
       onFilmLanguagesChange(standardLanguages);
       setCustomLanguage('');
     }
   };
 
   const isLanguageSelected = (languageValue: string) => {
-    return (filmLanguages || []).includes(languageValue);
+    return selectedLanguages.includes(languageValue);
   };
 
   const hasCustomLanguages = () => {
-    return (filmLanguages || []).some(lang => 
+    return selectedLanguages.some(lang => 
       !majorLanguages.find(option => option.value === lang)
     );
   };
@@ -349,7 +364,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
 
       {/* International Country Selector */}
       {nationalityType === 'international' && (
-        <div className="relative" style={{ zIndex: 1000, overflow: 'visible' }}>
+        <div className="relative mb-6" style={{ zIndex: 1000, overflow: 'visible' }}>
           <label className={`block text-white/90 ${getTypographyClass('body')} mb-2`}>
             {currentContent.searchCountry.replace('...', '')} <span className="text-red-400">*</span>
           </label>
@@ -476,13 +491,13 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
         )}
 
         {/* Selected Languages Display */}
-        {filmLanguages && filmLanguages.length > 0 && (
+        {selectedLanguages && selectedLanguages.length > 0 && (
           <div className="mt-4">
             <p className={`text-white/70 ${getTypographyClass('body')} mb-2 text-sm`}>
               {currentContent.selectedLanguages}
             </p>
             <div className="flex flex-wrap gap-2 mb-3">
-              {filmLanguages.map((language, index) => {
+              {selectedLanguages.map((language) => {
                 const standardLanguage = majorLanguages.find(lang => lang.value === language);
                 const displayName = standardLanguage 
                   ? standardLanguage.label[currentLanguage] 
@@ -499,7 +514,8 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
                     <button
                       type="button"
                       onClick={() => {
-                        const newLanguages = filmLanguages.filter(lang => lang !== language);
+                        const newLanguages = selectedLanguages.filter(lang => lang !== language);
+                        setSelectedLanguages(newLanguages);
                         onFilmLanguagesChange(newLanguages);
                       }}
                       className="ml-1 text-[#FCB283] hover:text-white transition-colors text-sm font-bold"
@@ -513,7 +529,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
             
             {/* Language count indicator */}
             <p className={`text-xs ${getTypographyClass('body')} text-white/50`}>
-              {filmLanguages.length} {currentLanguage === 'th' ? 'ภาษาที่เลือก' : 'languages selected'}
+              {selectedLanguages.length} {currentLanguage === 'th' ? 'ภาษาที่เลือก' : 'languages selected'}
             </p>
           </div>
         )}
