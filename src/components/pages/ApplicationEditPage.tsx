@@ -165,14 +165,6 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
             submitterRole: data.submitterRole,
             submitterCustomRole: data.submitterCustomRole,
             
-            // Director Information (for world category)
-            directorName: data.directorName,
-            directorNameTh: data.directorNameTh,
-            directorAge: data.directorAge,
-            directorPhone: data.directorPhone,
-            directorEmail: data.directorEmail,
-            directorRole: data.directorRole,
-            directorCustomRole: data.directorCustomRole,
             
             // Education Information
             schoolName: data.schoolName,
@@ -244,7 +236,6 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
       // Sections
       filmInfoTitle: "ข้อมูลภาพยนตร์",
       submitterInfoTitle: "ข้อมูลผู้ส่งผลงาน",
-      directorInfoTitle: "ข้อมูลผู้กำกับ",
       crewTitle: "ข้อมูลทีมงาน",
       filesTitle: "ไฟล์ที่แนบ",
       
@@ -282,7 +273,6 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
       // Sections
       filmInfoTitle: "Film Information",
       submitterInfoTitle: "Submitter Information",
-      directorInfoTitle: "Director Information",
       crewTitle: "Crew Information",
       filesTitle: "Attached Files",
       
@@ -333,20 +323,19 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
     if (!application.synopsis.trim()) errors.synopsis = validationMessages.required;
 
     // Submitter/Director Information
-    const isWorldCategory = application.competitionCategory === 'world';
-    const nameField = isWorldCategory ? 'directorName' : 'submitterName';
-    const nameThField = isWorldCategory ? 'directorNameTh' : 'submitterNameTh';
-    const ageField = isWorldCategory ? 'directorAge' : 'submitterAge';
-    const phoneField = isWorldCategory ? 'directorPhone' : 'submitterPhone';
-    const emailField = isWorldCategory ? 'directorEmail' : 'submitterEmail';
-    const roleField = isWorldCategory ? 'directorRole' : 'submitterRole';
+    const nameField = 'submitterName';
+    const nameThField = 'submitterNameTh';
+    const ageField = 'submitterAge';
+    const phoneField = 'submitterPhone';
+    const emailField = 'submitterEmail';
+    const roleField = 'submitterRole';
 
-    const name = isWorldCategory ? application.directorName : application.submitterName;
-    const nameTh = isWorldCategory ? application.directorNameTh : application.submitterNameTh;
-    const age = isWorldCategory ? application.directorAge : application.submitterAge;
-    const phone = isWorldCategory ? application.directorPhone : application.submitterPhone;
-    const email = isWorldCategory ? application.directorEmail : application.submitterEmail;
-    const role = isWorldCategory ? application.directorRole : application.submitterRole;
+    const name = application.submitterName;
+    const nameTh = application.submitterNameTh;
+    const age = application.submitterAge;
+    const phone = application.submitterPhone;
+    const email = application.submitterEmail;
+    const role = application.submitterRole;
 
     if (!name?.trim()) errors[nameField] = validationMessages.required;
     if (isThaiNationality && !nameTh?.trim()) errors[nameThField] = validationMessages.required;
@@ -463,31 +452,23 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
       };
 
       // Add category-specific fields
-      if (application.competitionCategory === 'world') {
-        updateData.directorName = application.directorName || null;
-        updateData.directorNameTh = application.directorNameTh || null;
-        updateData.directorAge = application.directorAge || null;
-        updateData.directorPhone = application.directorPhone || null;
-        updateData.directorEmail = application.directorEmail || null;
-        updateData.directorRole = application.directorRole || null;
-        updateData.directorCustomRole = application.directorCustomRole || null;
-      } else {
-        updateData.submitterName = application.submitterName || null;
-        updateData.submitterNameTh = application.submitterNameTh || null;
-        updateData.submitterAge = application.submitterAge || null;
-        updateData.submitterPhone = application.submitterPhone || null;
-        updateData.submitterEmail = application.submitterEmail || null;
-        updateData.submitterRole = application.submitterRole || null;
-        updateData.submitterCustomRole = application.submitterCustomRole || null;
-        
-        if (application.competitionCategory === 'youth') {
-          updateData.schoolName = application.schoolName || null;
-          updateData.studentId = application.studentId || null;
-        } else if (application.competitionCategory === 'future') {
-          updateData.universityName = application.universityName || null;
-          updateData.faculty = application.faculty || null;
-          updateData.universityId = application.universityId || null;
-        }
+      // Submitter Information (now used for all categories)
+      updateData.submitterName = application.submitterName || null;
+      updateData.submitterNameTh = application.submitterNameTh || null;
+      updateData.submitterAge = application.submitterAge || null;
+      updateData.submitterPhone = application.submitterPhone || null;
+      updateData.submitterEmail = application.submitterEmail || null;
+      updateData.submitterRole = application.submitterRole || null;
+      updateData.submitterCustomRole = application.submitterCustomRole || null;
+      
+      // Education fields for youth and future categories
+      if (application.competitionCategory === 'youth') {
+        updateData.schoolName = application.schoolName || null;
+        updateData.studentId = application.studentId || null;
+      } else if (application.competitionCategory === 'future') {
+        updateData.universityName = application.universityName || null;
+        updateData.faculty = application.faculty || null;
+        updateData.universityId = application.universityId || null;
       }
 
       await updateDoc(docRef, updateData);
@@ -770,7 +751,7 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
         </FormSection>
 
         {/* Section 2: Submitter/Director Information */}
-        <FormSection title={isWorldCategory ? currentContent.directorInfoTitle : currentContent.submitterInfoTitle} icon="👤" className="w-full">
+        <FormSection title={currentContent.submitterInfoTitle} icon="👤" className="w-full">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className={`block text-white/90 ${getClass('body')} mb-2`}>
@@ -778,25 +759,26 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
                 </label>
                 <input
                   type="text"
-                  value={isWorldCategory ? application.directorName || '' : application.submitterName || ''}
-                  onChange={(e) => handleInputChange(isWorldCategory ? 'directorName' : 'submitterName', e.target.value)}
-                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors[isWorldCategory ? 'directorName' : 'submitterName'] ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                  value={application.submitterName || ''}
+                  onChange={(e) => handleInputChange('submitterName', e.target.value)}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterName ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
                 />
-                <ErrorMessage error={formErrors[isWorldCategory ? 'directorName' : 'submitterName']} />
+                <ErrorMessage error={formErrors.submitterName} />
               </div>
               
               {isThaiNationality && (
                 <div>
                   <label className={`block text-white/90 ${getClass('body')} mb-2`}>
-                    {currentContent.submitterNameTh} <span className="text-red-400">*</span>
+                    {currentContent.submitterNameTh} <span className="text-white/60">({currentLanguage === 'th' ? 'ไม่บังคับ' : 'Optional'})</span>
                   </label>
                   <input
                     type="text"
-                    value={isWorldCategory ? application.directorNameTh || '' : application.submitterNameTh || ''}
-                    onChange={(e) => handleInputChange(isWorldCategory ? 'directorNameTh' : 'submitterNameTh', e.target.value)}
-                    className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors[isWorldCategory ? 'directorNameTh' : 'submitterNameTh'] ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                    value={application.submitterNameTh || ''}
+                    onChange={(e) => handleInputChange('submitterNameTh', e.target.value)}
+                    className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterNameTh ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                    placeholder={currentLanguage === 'th' ? 'ชื่อ-นามสกุลภาษาไทย (ไม่บังคับ)' : 'Full name in Thai (optional)'}
                   />
-                  <ErrorMessage error={formErrors[isWorldCategory ? 'directorNameTh' : 'submitterNameTh']} />
+                  <ErrorMessage error={formErrors.submitterNameTh} />
                 </div>
               )}
               
@@ -806,11 +788,18 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
                 </label>
                 <input
                   type="number"
-                  value={isWorldCategory ? application.directorAge || '' : application.submitterAge || ''}
-                  onChange={(e) => handleInputChange(isWorldCategory ? 'directorAge' : 'submitterAge', parseInt(e.target.value) || 0)}
+                  value={application.submitterAge || ''}
+                  onChange={(e) => handleInputChange('submitterAge', parseInt(e.target.value) || 0)}
+                  min={application.competitionCategory === 'youth' ? "12" : application.competitionCategory === 'future' ? "18" : "20"}
+                  max={application.competitionCategory === 'youth' ? "18" : application.competitionCategory === 'future' ? "25" : "120"}
                   className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors[isWorldCategory ? 'directorAge' : 'submitterAge'] ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
                 />
-                <ErrorMessage error={formErrors[isWorldCategory ? 'directorAge' : 'submitterAge']} />
+                <p className={`text-xs ${getClass('body')} text-white/60 mt-1`}>
+                  {application.competitionCategory === 'youth' && (currentLanguage === 'th' ? 'อายุ 12-18 ปี (นักเรียนมัธยมศึกษา)' : 'Age 12-18 years (High school students)')}
+                  {application.competitionCategory === 'future' && (currentLanguage === 'th' ? 'อายุไม่เกิน 25 ปี (นักศึกษาอุดมศึกษา)' : 'Age up to 25 years (University students)')}
+                  {application.competitionCategory === 'world' && (currentLanguage === 'th' ? 'อายุไม่น้อยกว่า 20 ปี (ประชาชนทั่วไป)' : 'Age 20+ years (General public)')}
+                </p>
+                <ErrorMessage error={formErrors.submitterAge} />
               </div>
               
               <div>
@@ -819,11 +808,11 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
                 </label>
                 <input
                   type="tel"
-                  value={isWorldCategory ? application.directorPhone || '' : application.submitterPhone || ''}
-                  onChange={(e) => handleInputChange(isWorldCategory ? 'directorPhone' : 'submitterPhone', e.target.value)}
-                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors[isWorldCategory ? 'directorPhone' : 'submitterPhone'] ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                  value={application.submitterPhone || ''}
+                  onChange={(e) => handleInputChange('submitterPhone', e.target.value)}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterPhone ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
                 />
-                <ErrorMessage error={formErrors[isWorldCategory ? 'directorPhone' : 'submitterPhone']} />
+                <ErrorMessage error={formErrors.submitterPhone} />
               </div>
               
               <div>
@@ -832,11 +821,11 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
                 </label>
                 <input
                   type="email"
-                  value={isWorldCategory ? application.directorEmail || '' : application.submitterEmail || ''}
-                  onChange={(e) => handleInputChange(isWorldCategory ? 'directorEmail' : 'submitterEmail', e.target.value)}
-                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors[isWorldCategory ? 'directorEmail' : 'submitterEmail'] ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                  value={application.submitterEmail || ''}
+                  onChange={(e) => handleInputChange('submitterEmail', e.target.value)}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterEmail ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
                 />
-                <ErrorMessage error={formErrors[isWorldCategory ? 'directorEmail' : 'submitterEmail']} />
+                <ErrorMessage error={formErrors.submitterEmail} />
               </div>
               
               <div>
@@ -844,9 +833,9 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
                   {currentContent.roleInFilm} <span className="text-red-400">*</span>
                 </label>
                 <select
-                  value={isWorldCategory ? application.directorRole || '' : application.submitterRole || ''}
-                  onChange={(e) => handleInputChange(isWorldCategory ? 'directorRole' : 'submitterRole', e.target.value)}
-                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors[isWorldCategory ? 'directorRole' : 'submitterRole'] ? 'border-red-400 error-field' : 'border-white/20'} text-white focus:border-[#FCB283] focus:outline-none`}
+                  value={application.submitterRole || ''}
+                  onChange={(e) => handleInputChange('submitterRole', e.target.value)}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterRole ? 'border-red-400 error-field' : 'border-white/20'} text-white focus:border-[#FCB283] focus:outline-none`}
                 >
                   <option value="" className="bg-[#110D16]">{currentContent.selectRole}</option>
                   {['Director', 'Producer', 'Cinematographer', 'Editor', 'Sound Designer', 'Production Designer', 'Costume Designer', 'Makeup Artist', 'Screenwriter', 'Composer', 'Casting Director', 'Visual Effects Supervisor', 'Location Manager', 'Script Supervisor', 'Assistant Director', 'Other'].map(role => (
@@ -855,7 +844,24 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
                     </option>
                   ))}
                 </select>
-                <ErrorMessage error={formErrors[isWorldCategory ? 'directorRole' : 'submitterRole']} />
+                <ErrorMessage error={formErrors.submitterRole} />
+              </div>
+              
+              {application.submitterRole === 'Other' && (
+                <div>
+                  <label className={`block text-white/90 ${getClass('body')} mb-2`}>
+                    {currentContent.specifyRole} <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={application.submitterCustomRole || ''}
+                    onChange={(e) => handleInputChange('submitterCustomRole', e.target.value)}
+                    className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterCustomRole ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                    placeholder={currentLanguage === 'th' ? 'ระบุบทบาทของคุณ' : 'Specify your role'}
+                  />
+                  <ErrorMessage error={formErrors.submitterCustomRole} />
+                </div>
+              )}
               </div>
               
               {/* Education Fields */}

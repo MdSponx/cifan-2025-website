@@ -595,13 +595,13 @@ export class SubmissionService {
         const worldData = formData as WorldFormData;
         submissionData = {
           ...baseData,
-          directorName: worldData.directorName,
-          directorNameTh: worldData.directorNameTh || null,
-          directorAge: parseInt(worldData.directorAge),
-          directorPhone: worldData.directorPhone,
-          directorEmail: worldData.directorEmail,
-          directorRole: worldData.directorRole,
-          directorCustomRole: worldData.directorCustomRole || null,
+          submitterName: worldData.submitterName,
+          submitterNameTh: worldData.submitterNameTh || null,
+          submitterAge: parseInt(worldData.submitterAge),
+          submitterPhone: worldData.submitterPhone,
+          submitterEmail: worldData.submitterEmail,
+          submitterRole: worldData.submitterRole,
+          submitterCustomRole: worldData.submitterCustomRole || null,
           crewMembers: (worldData.crewMembers || []).map(member => ({
             fullName: member.fullName,
             fullNameTh: member.fullNameTh || null,
@@ -739,13 +739,13 @@ export class SubmissionService {
         const worldData = formData as WorldFormData;
         submissionData = {
           ...baseData,
-          directorName: worldData.directorName || '',
-          directorNameTh: worldData.directorNameTh || null,
-          directorAge: worldData.directorAge ? parseInt(worldData.directorAge) : null,
-          directorPhone: worldData.directorPhone || '',
-          directorEmail: worldData.directorEmail || '',
-          directorRole: worldData.directorRole || '',
-          directorCustomRole: worldData.directorCustomRole || null,
+          submitterName: worldData.submitterName || '',
+          submitterNameTh: worldData.submitterNameTh || null,
+          submitterAge: worldData.submitterAge ? parseInt(worldData.submitterAge) : null,
+          submitterPhone: worldData.submitterPhone || '',
+          submitterEmail: worldData.submitterEmail || '',
+          submitterRole: worldData.submitterRole || '',
+          submitterCustomRole: worldData.submitterCustomRole || null,
           crewMembers: (worldData.crewMembers || []).map(member => ({
             fullName: member.fullName,
             fullNameTh: member.fullNameTh || null,

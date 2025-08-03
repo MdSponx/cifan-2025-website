@@ -231,10 +231,10 @@ const ApplicationLayout: React.FC<ApplicationLayoutProps> = ({ application }) =>
                     }
                   }}
                 />
-              ) : (
+                      📧 {(application as any).submitterEmail}
                 <div className="w-full h-full flex flex-col items-center justify-center text-white/60">
                   <div className="text-4xl mb-2">🖼️</div>
-                  <div className="text-sm text-center px-4">
+                      📱 {(application as any).submitterPhone}
                     {currentLanguage === 'th' ? 'ไม่มีโปสเตอร์' : 'No poster available'}
                   </div>
                 </div>
@@ -416,9 +416,9 @@ const ApplicationLayout: React.FC<ApplicationLayoutProps> = ({ application }) =>
                       {currentLanguage === 'th' ? 'บทบาท:' : 'Role:'}
                     </span>
                     <p className={`${getClass('body')} text-white`}>
-                      {(application as any).submitterRole === 'Other' 
-                        ? ((application as any).submitterCustomRole || (application as any).directorCustomRole)
-                        : ((application as any).submitterRole || (application as any).directorRole)
+                      {(application as any).submitterRole === 'Other'
+                        ? (application as any).submitterCustomRole
+                        : (application as any).submitterRole
                       }
                     </p>
                   </div>
@@ -427,7 +427,7 @@ const ApplicationLayout: React.FC<ApplicationLayoutProps> = ({ application }) =>
                       {currentLanguage === 'th' ? 'อายุ:' : 'Age:'}
                     </span>
                     <p className={`${getClass('body')} text-white`}>
-                      {(application as any).submitterAge || (application as any).directorAge} {currentLanguage === 'th' ? 'ปี' : 'years'}
+                      {(application as any).submitterAge} {currentLanguage === 'th' ? 'ปี' : 'years'}
                     </p>
                   </div>
                   {/* Educational Information */}

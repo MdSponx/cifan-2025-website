@@ -94,13 +94,13 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
       return {
         ...baseData,
         filmLanguages: ['Thai'],
-        directorName: '',
-        directorNameTh: '',
-        directorAge: '',
-        directorPhone: '',
-        directorEmail: user?.email || '',
-        directorRole: '',
-        directorCustomRole: ''
+        submitterName: '',
+        submitterNameTh: '',
+        submitterAge: '',
+        submitterPhone: '',
+        submitterEmail: user?.email || '',
+        submitterRole: '',
+        submitterCustomRole: ''
       } as WorldFormData;
     }
   });
@@ -124,11 +124,6 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
         submitterAge: userProfile.age ? userProfile.age.toString() : '',
         submitterPhone: userProfile.phoneNumber || '',
         submitterEmail: userProfile.email || user?.email || '',
-        directorName: userProfile.fullNameEN || '',
-        directorNameTh: userProfile.fullNameTH || '',
-        directorAge: userProfile.age ? userProfile.age.toString() : '',
-        directorPhone: userProfile.phoneNumber || '',
-        directorEmail: userProfile.email || user?.email || ''
       };
       
       setFormData(prev => ({ ...prev, ...profileData }));
@@ -150,7 +145,6 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
       // Section titles
       filmInfoTitle: "ข้อมูลภาพยนตร์",
       submitterInfoTitle: "ข้อมูลผู้ส่งผลงาน",
-      directorInfoTitle: "ข้อมูลผู้กำกับ",
       crewTitle: "ข้อมูลทีมงาน",
       filesTitle: "ไฟล์ที่แนบ",
       agreementsTitle: "ข้อตกลงและเงื่อนไข",
@@ -197,7 +191,6 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
       // Section titles
       filmInfoTitle: "Film Information",
       submitterInfoTitle: "Submitter Information",
-      directorInfoTitle: "Director Information",
       crewTitle: "Crew Information",
       filesTitle: "Attached Files",
       agreementsTitle: "Terms & Conditions",
@@ -258,12 +251,12 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
     const emailField = isWorldCategory ? 'directorEmail' : 'submitterEmail';
     const roleField = isWorldCategory ? 'directorRole' : 'submitterRole';
 
-    const name = isWorldCategory ? (formData as WorldFormData).directorName : (formData as YouthFormData | FutureFormData).submitterName;
-    const nameTh = isWorldCategory ? (formData as WorldFormData).directorNameTh : (formData as YouthFormData | FutureFormData).submitterNameTh;
-    const age = isWorldCategory ? (formData as WorldFormData).directorAge : (formData as YouthFormData | FutureFormData).submitterAge;
-    const phone = isWorldCategory ? (formData as WorldFormData).directorPhone : (formData as YouthFormData | FutureFormData).submitterPhone;
-    const email = isWorldCategory ? (formData as WorldFormData).directorEmail : (formData as YouthFormData | FutureFormData).submitterEmail;
-    const role = isWorldCategory ? (formData as WorldFormData).directorRole : (formData as YouthFormData | FutureFormData).submitterRole;
+    const name = (formData as YouthFormData | FutureFormData | WorldFormData).submitterName;
+    const nameTh = (formData as YouthFormData | FutureFormData | WorldFormData).submitterNameTh;
+    const age = (formData as YouthFormData | FutureFormData | WorldFormData).submitterAge;
+    const phone = (formData as YouthFormData | FutureFormData | WorldFormData).submitterPhone;
+    const email = (formData as YouthFormData | FutureFormData | WorldFormData).submitterEmail;
+    const role = (formData as YouthFormData | FutureFormData | WorldFormData).submitterRole;
 
     if (!name?.trim()) errors[nameField] = validationMessages.required;
     if (isThaiNationality && !nameTh?.trim()) errors[nameThField] = validationMessages.required;
@@ -276,7 +269,9 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
       } else if (category === 'future' && (ageNum < 18 || ageNum > 25)) {
         errors[ageField] = currentLanguage === 'th' ? 'อายุต้องไม่เกิน 25 ปี' : 'Age must not exceed 25 years';
       }
-      // World category has no age restrictions
+      else if (category === 'world' && ageNum < 20) {
+        errors[ageField] = currentLanguage === 'th' ? 'อายุต้องไม่น้อยกว่า 20 ปี' : 'Age must be at least 20 years';
+      }
     }
     if (!phone?.trim()) errors[phoneField] = validationMessages.required;
     if (!email?.trim()) {
@@ -620,7 +615,7 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
           </FormSection>
 
           {/* Section 3: Submitter/Director Information (Pre-filled from Profile) */}
-          <FormSection title={category === 'world' ? currentContent.directorInfoTitle : currentContent.submitterInfoTitle} icon="👤" className="overflow-visible relative">
+          <FormSection title={currentContent.submitterInfoTitle} icon="👤" className="overflow-visible relative">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 overflow-visible">
               <div>
                 <label className={`block text-white/90 ${getClass('body')} mb-2`}>
@@ -628,25 +623,26 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
                 </label>
                 <input
                   type="text"
-                  value={category === 'world' ? (formData as WorldFormData).directorName : (formData as YouthFormData | FutureFormData).submitterName}
-                  onChange={(e) => handleInputChange(category === 'world' ? 'directorName' : 'submitterName', e.target.value)}
-                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors[category === 'world' ? 'directorName' : 'submitterName'] ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                  value={(formData as YouthFormData | FutureFormData | WorldFormData).submitterName}
+                  onChange={(e) => handleInputChange('submitterName', e.target.value)}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterName ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
                 />
-                <ErrorMessage error={formErrors[category === 'world' ? 'directorName' : 'submitterName']} />
+                <ErrorMessage error={formErrors.submitterName} />
               </div>
               
-              {(category !== 'world' && (formData as YouthFormData | FutureFormData).nationality === 'Thailand') && (
+              {((category === 'youth' || category === 'future') && (formData as YouthFormData | FutureFormData).nationality === 'Thailand') && (
                 <div>
                   <label className={`block text-white/90 ${getClass('body')} mb-2`}>
-                    {currentContent.submitterNameTh} <span className="text-red-400">*</span>
+                    {currentContent.submitterNameTh} <span className="text-white/60">({currentLanguage === 'th' ? 'ไม่บังคับ' : 'Optional'})</span>
                   </label>
                   <input
                     type="text"
-                    value={category === 'world' ? (formData as WorldFormData).directorNameTh || '' : (formData as YouthFormData | FutureFormData).submitterNameTh || ''}
-                    onChange={(e) => handleInputChange(category === 'world' ? 'directorNameTh' : 'submitterNameTh', e.target.value)}
-                    className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors[category === 'world' ? 'directorNameTh' : 'submitterNameTh'] ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                    value={(formData as YouthFormData | FutureFormData | WorldFormData).submitterNameTh || ''}
+                    onChange={(e) => handleInputChange('submitterNameTh', e.target.value)}
+                    className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterNameTh ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                    placeholder={currentLanguage === 'th' ? 'ชื่อ-นามสกุลภาษาไทย (ไม่บังคับ)' : 'Full name in Thai (optional)'}
                   />
-                  <ErrorMessage error={formErrors[category === 'world' ? 'directorNameTh' : 'submitterNameTh']} />
+                  <ErrorMessage error={formErrors.submitterNameTh} />
                 </div>
               )}
               
@@ -656,19 +652,19 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
                 </label>
                 <input
                   type="number"
-                  value={category === 'world' ? (formData as WorldFormData).directorAge : (formData as YouthFormData | FutureFormData).submitterAge}
-                  onChange={(e) => handleInputChange(category === 'world' ? 'directorAge' : 'submitterAge', e.target.value)}
+                  value={(formData as YouthFormData | FutureFormData | WorldFormData).submitterAge}
+                  onChange={(e) => handleInputChange('submitterAge', e.target.value)}
                   min={category === 'youth' ? "12" : category === 'future' ? "18" : "1"}
-                  max={category === 'youth' ? "18" : category === 'future' ? "25" : "100"}
-                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors[category === 'world' ? 'directorAge' : 'submitterAge'] ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                  max={category === 'youth' ? "18" : category === 'future' ? "25" : "120"}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterAge ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
                 />
                 {/* Age restriction warning */}
                 <p className={`text-xs ${getClass('body')} text-white/60 mt-1`}>
                   {category === 'youth' && (currentLanguage === 'th' ? 'อายุ 12-18 ปี (นักเรียนมัธยมศึกษา)' : 'Age 12-18 years (High school students)')}
                   {category === 'future' && (currentLanguage === 'th' ? 'อายุไม่เกิน 25 ปี (นักศึกษาอุดมศึกษา)' : 'Age up to 25 years (University students)')}
-                  {category === 'world' && (currentLanguage === 'th' ? 'ไม่จำกัดอายุ (ประชาชนทั่วไป)' : 'No age limit (General public)')}
+                  {category === 'world' && (currentLanguage === 'th' ? 'อายุไม่น้อยกว่า 20 ปี (ประชาชนทั่วไป)' : 'Age 20+ years (General public)')}
                 </p>
-                <ErrorMessage error={formErrors[category === 'world' ? 'directorAge' : 'submitterAge']} />
+                <ErrorMessage error={formErrors.submitterAge} />
               </div>
               
               <div>
@@ -677,35 +673,60 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
                 </label>
                 <input
                   type="tel"
-                  value={category === 'world' ? (formData as WorldFormData).directorPhone : (formData as YouthFormData | FutureFormData).submitterPhone}
-                  onChange={(e) => handleInputChange(category === 'world' ? 'directorPhone' : 'submitterPhone', e.target.value)}
-                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors[category === 'world' ? 'directorPhone' : 'submitterPhone'] ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                  value={(formData as YouthFormData | FutureFormData | WorldFormData).submitterPhone}
+                  onChange={(e) => handleInputChange('submitterPhone', e.target.value)}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterPhone ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
                 />
-                <ErrorMessage error={formErrors[category === 'world' ? 'directorPhone' : 'submitterPhone']} />
+                <ErrorMessage error={formErrors.submitterPhone} />
               </div>
               
               <div>
                 <label className={`block text-white/90 ${getClass('body')} mb-2`}>
                   {currentContent.email} <span className="text-red-400">*</span>
                 </label>
-                <div className="glass-card p-4 rounded-lg">
-                  <div className="flex flex-wrap gap-2">
-                    {(formData.filmLanguages || []).map((language, index) => (
-                      <span
-                        key={index}
-                        className="inline-flex items-center space-x-1 px-3 py-1 bg-[#FCB283]/20 text-[#FCB283] rounded-full text-sm border border-[#FCB283]/30"
-                      >
-                        <span>{language}</span>
-                      </span>
-                    ))}
-                    {(!formData.filmLanguages || formData.filmLanguages.length === 0) && (
-                      <span className="text-white/60 text-sm">
-                        {currentLanguage === 'th' ? 'ยังไม่ได้เลือกภาษา' : 'No languages selected'}
-                      </span>
-                    )}
-                  </div>
+                <input
+                  type="email"
+                  value={(formData as YouthFormData | FutureFormData | WorldFormData).submitterEmail}
+                  onChange={(e) => handleInputChange('submitterEmail', e.target.value)}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterEmail ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                />
+                <ErrorMessage error={formErrors.submitterEmail} />
+              </div>
+              
+              <div>
+                <label className={`block text-white/90 ${getClass('body')} mb-2`}>
+                  {currentContent.roleInFilm} <span className="text-red-400">*</span>
+                </label>
+                <select
+                  value={(formData as YouthFormData | FutureFormData | WorldFormData).submitterRole}
+                  onChange={(e) => handleInputChange('submitterRole', e.target.value)}
+                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterRole ? 'border-red-400 error-field' : 'border-white/20'} text-white focus:border-[#FCB283] focus:outline-none`}
+                >
+                  <option value="" className="bg-[#110D16]">{currentContent.selectRole}</option>
+                  {FILM_ROLES.map(role => (
+                    <option key={role} value={role} className="bg-[#110D16]">
+                      {role}
+                    </option>
+                  ))}
+                </select>
+                <ErrorMessage error={formErrors.submitterRole} />
+              </div>
+              
+              {(formData as YouthFormData | FutureFormData | WorldFormData).submitterRole === 'Other' && (
+                <div>
+                  <label className={`block text-white/90 ${getClass('body')} mb-2`}>
+                    {currentContent.specifyRole} <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={(formData as YouthFormData | FutureFormData | WorldFormData).submitterCustomRole || ''}
+                    onChange={(e) => handleInputChange('submitterCustomRole', e.target.value)}
+                    className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.submitterCustomRole ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                    placeholder={currentLanguage === 'th' ? 'ระบุบทบาทของคุณ' : 'Specify your role'}
+                  />
+                  <ErrorMessage error={formErrors.submitterCustomRole} />
                 </div>
-                <ErrorMessage error={formErrors[category === 'world' ? 'directorRole' : 'submitterRole']} />
+              )}
               </div>
               
               {/* Education Fields */}

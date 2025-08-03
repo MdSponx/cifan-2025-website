@@ -69,14 +69,14 @@ export interface YouthFormData extends BaseFormData {
 export interface WorldFormData extends BaseFormData {
   filmLanguages: string[];
   
-  // Director Information
-  directorName: string;
-  directorNameTh?: string;
-  directorAge: string;
-  directorPhone: string;
-  directorEmail: string;
-  directorRole: string;
-  directorCustomRole?: string;
+  // Submitter Information
+  submitterName: string;
+  submitterNameTh?: string;
+  submitterAge: string;
+  submitterPhone: string;
+  submitterEmail: string;
+  submitterRole: string;
+  submitterCustomRole?: string;
   
   // Crew Information
   crewMembers: CrewMember[];
