@@ -422,6 +422,9 @@ const CrewManagement: React.FC<CrewManagementProps> = ({
             <div>
               <label className={`block text-white/90 ${getClass('body')} mb-2`}>
                 {currentContent.submitterNameTh} {currentContent.optional}
+                <span className="text-white/60 text-xs block mt-1">
+                  {currentLanguage === 'th' ? 'เป็นภาษาไทย' : 'In Thai'}
+                </span>
               </label>
               <input
                 type="text"
