@@ -519,7 +519,7 @@ export class SubmissionService {
         // Film data
         filmTitle: formData.filmTitle,
         filmTitleTh: (formData as YouthFormData).filmTitleTh || null,
-        filmLanguage: formData.filmLanguage || 'Thai',
+        filmLanguages: formData.filmLanguages || ['Thai'],
         genres: formData.genres,
         format: formData.format,
         duration: parseInt(formData.duration),
@@ -663,7 +663,7 @@ export class SubmissionService {
         // Film data (only what's available)
         filmTitle: formData.filmTitle || '',
         filmTitleTh: (formData as YouthFormData).filmTitleTh || null,
-        filmLanguage: formData.filmLanguage || 'Thai',
+        filmLanguages: formData.filmLanguages || ['Thai'],
         genres: formData.genres || [],
         format: formData.format || '',
         duration: formData.duration ? parseInt(formData.duration) : null,

@@ -386,7 +386,7 @@ class AdminSubmissionService {
         status: data.status,
         filmTitle: data.filmTitle,
         filmTitleTh: data.filmTitleTh,
-        filmLanguage: data.filmLanguage,
+        filmLanguages: data.filmLanguages || (data.filmLanguage ? [data.filmLanguage] : []), // Backward compatibility
         genres: data.genres || [],
         format: data.format,
         duration: data.duration,

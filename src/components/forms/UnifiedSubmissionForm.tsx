@@ -40,7 +40,7 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
       applicationId: `${category}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       filmTitle: '',
       filmTitleTh: '',
-      filmLanguage: 'Thai',
+      filmLanguages: ['Thai'],
       genres: [],
       format: '' as 'live-action' | 'animation' | '',
       duration: '',
@@ -63,7 +63,7 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
       return {
         ...baseData,
         nationality: 'Thailand',
-        filmLanguage: 'Thai',
+        filmLanguages: ['Thai'],
         submitterName: '',
         submitterNameTh: '',
         submitterAge: '',
@@ -78,7 +78,7 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
       return {
         ...baseData,
         nationality: 'Thailand',
-        filmLanguage: 'Thai',
+        filmLanguages: ['Thai'],
         submitterName: '',
         submitterNameTh: '',
         submitterAge: '',
@@ -93,7 +93,7 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
     } else {
       return {
         ...baseData,
-        filmLanguage: 'Thai',
+        filmLanguages: ['Thai'],
         directorName: '',
         directorNameTh: '',
         directorAge: '',
@@ -342,6 +342,10 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
   const handleFilmLanguageChange = (language: string) => {
     handleInputChange('filmLanguage', language);
   };
+
+  const handleFilmLanguagesChange = (languages: string[]) => {
+    handleInputChange('filmLanguages', languages);
+  };
   // Compute Thai nationality status for validation and rendering
   const isThaiNationality = (category === 'youth' || category === 'future') && 
     (formData as YouthFormData | FutureFormData).nationality === 'Thailand';
@@ -514,8 +518,8 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
             <NationalitySelector
               onNationalityChange={handleNationalityChange}
               onNationalityTypeChange={() => {}} // No longer needed but kept for compatibility
-              onFilmLanguageChange={handleFilmLanguageChange}
-              filmLanguage={formData.filmLanguage}
+              onFilmLanguagesChange={handleFilmLanguagesChange}
+              filmLanguages={formData.filmLanguages}
             />
           </div>
 
@@ -685,31 +689,23 @@ const UnifiedSubmissionForm: React.FC<UnifiedSubmissionFormProps> = ({ category 
                 <label className={`block text-white/90 ${getClass('body')} mb-2`}>
                   {currentContent.email} <span className="text-red-400">*</span>
                 </label>
-                <input
-                  type="email"
-                  value={category === 'world' ? (formData as WorldFormData).directorEmail : (formData as YouthFormData | FutureFormData).submitterEmail}
-                  onChange={(e) => handleInputChange(category === 'world' ? 'directorEmail' : 'submitterEmail', e.target.value)}
-                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors[category === 'world' ? 'directorEmail' : 'submitterEmail'] ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
-                />
-                <ErrorMessage error={formErrors[category === 'world' ? 'directorEmail' : 'submitterEmail']} />
-              </div>
-              
-              <div>
-                <label className={`block text-white/90 ${getClass('body')} mb-2`}>
-                  {currentContent.roleInFilm} <span className="text-red-400">*</span>
-                </label>
-                <select
-                  value={category === 'world' ? (formData as WorldFormData).directorRole : (formData as YouthFormData | FutureFormData).submitterRole}
-                  onChange={(e) => handleInputChange(category === 'world' ? 'directorRole' : 'submitterRole', e.target.value)}
-                  className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors[category === 'world' ? 'directorRole' : 'submitterRole'] ? 'border-red-400 error-field' : 'border-white/20'} text-white focus:border-[#FCB283] focus:outline-none`}
-                >
-                  <option value="" className="bg-[#110D16]">{currentContent.selectRole}</option>
-                  {FILM_ROLES.map(role => (
-                    <option key={role} value={role} className="bg-[#110D16]">
-                      {role}
-                    </option>
-                  ))}
-                </select>
+                <div className="glass-card p-4 rounded-lg">
+                  <div className="flex flex-wrap gap-2">
+                    {(formData.filmLanguages || []).map((language, index) => (
+                      <span
+                        key={index}
+                        className="inline-flex items-center space-x-1 px-3 py-1 bg-[#FCB283]/20 text-[#FCB283] rounded-full text-sm border border-[#FCB283]/30"
+                      >
+                        <span>{language}</span>
+                      </span>
+                    ))}
+                    {(!formData.filmLanguages || formData.filmLanguages.length === 0) && (
+                      <span className="text-white/60 text-sm">
+                        {currentLanguage === 'th' ? 'ยังไม่ได้เลือกภาษา' : 'No languages selected'}
+                      </span>
+                    )}
+                  </div>
+                </div>
                 <ErrorMessage error={formErrors[category === 'world' ? 'directorRole' : 'submitterRole']} />
               </div>
               

@@ -30,7 +30,7 @@ interface EditableApplicationData {
   // Film Information
   filmTitle: string;
   filmTitleTh?: string;
-  filmLanguage?: string;
+  filmLanguages?: string[];
   genres: string[];
   format: string;
   duration: number;
@@ -149,7 +149,7 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
             // Film Information
             filmTitle: data.filmTitle || '',
             filmTitleTh: data.filmTitleTh,
-            filmLanguage: data.filmLanguage || 'Thai',
+           filmLanguages: data.filmLanguages || (data.filmLanguage ? [data.filmLanguage] : ['Thai']), // Backward compatibility
             genres: data.genres || [],
             format: data.format || '',
             duration: data.duration || 0,
@@ -679,33 +679,25 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
               {/* Film Language */}
               <div>
                 <label className={`block text-white/90 ${getClass('body')} mb-2`}>
-                  {currentContent.filmLanguage} <span className="text-red-400">*</span>
+                  {currentLanguage === 'th' ? 'ภาษาในภาพยนตร์' : 'Film Languages'} <span className="text-red-400">*</span>
                 </label>
-                <select
-                  value={application.filmLanguage || 'Thai'}
-                  onChange={(e) => handleInputChange('filmLanguage', e.target.value)}
-                  className="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white focus:border-[#FCB283] focus:outline-none"
-                  required
-                >
-                  <option value="Thai" className="bg-[#110D16]">
-                    {currentLanguage === 'th' ? 'ภาษาไทย' : 'Thai'}
-                  </option>
-                  <option value="English" className="bg-[#110D16]">
-                    {currentLanguage === 'th' ? 'ภาษาอังกฤษ' : 'English'}
-                  </option>
-                  <option value="Mandarin" className="bg-[#110D16]">
-                    {currentLanguage === 'th' ? 'ภาษาจีนกลาง' : 'Mandarin Chinese'}
-                  </option>
-                  <option value="Japanese" className="bg-[#110D16]">
-                    {currentLanguage === 'th' ? 'ภาษาญี่ปุ่น' : 'Japanese'}
-                  </option>
-                  <option value="Korean" className="bg-[#110D16]">
-                    {currentLanguage === 'th' ? 'ภาษาเกาหลี' : 'Korean'}
-                  </option>
-                  <option value="Other" className="bg-[#110D16]">
-                    {currentLanguage === 'th' ? 'อื่นๆ' : 'Other'}
-                  </option>
-                </select>
+                <div className="glass-card p-4 rounded-lg">
+                  <div className="flex flex-wrap gap-2">
+                    {(application.filmLanguages || []).map((language, index) => (
+                      <span
+                        key={index}
+                        className="inline-flex items-center space-x-1 px-3 py-1 bg-[#FCB283]/20 text-[#FCB283] rounded-full text-sm border border-[#FCB283]/30"
+                      >
+                        <span>{language}</span>
+                      </span>
+                    ))}
+                    {(!application.filmLanguages || application.filmLanguages.length === 0) && (
+                      <span className="text-white/60 text-sm">
+                        {currentLanguage === 'th' ? 'ยังไม่ได้เลือกภาษา' : 'No languages selected'}
+                      </span>
+                    )}
+                  </div>
+                </div>
                 <p className={`text-xs ${getClass('body')} text-white/60 mt-1`}>
                   {currentLanguage === 'th' 
                     ? 'หากใช้ภาษาอื่นที่ไม่ใช่ไทยหรืออังกฤษ กรุณาเตรียมซับไตเติล'

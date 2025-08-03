@@ -194,7 +194,7 @@ export interface AdminApplicationCard {
   userId: string;
   filmTitle: string;
   filmTitleTh?: string;
-  filmLanguage?: string;
+  filmLanguages?: string[];
   directorName: string;
   directorNameTh?: string;
   competitionCategory: 'youth' | 'future' | 'world';
@@ -263,7 +263,7 @@ export interface AdminApplicationData {
   status: 'draft' | 'submitted' | 'under-review' | 'accepted' | 'rejected';
   filmTitle: string;
   filmTitleTh?: string;
-  filmLanguage?: string;
+  filmLanguages?: string[];
   genres: string[];
   format: string;
   duration: number;

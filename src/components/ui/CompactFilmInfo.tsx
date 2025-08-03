@@ -11,7 +11,7 @@ import {
 interface CompactFilmInfoProps {
   filmTitle: string;
   filmTitleTh?: string;
-  filmLanguage?: string;
+  filmLanguages?: string[];
   genres: string[];
   format: string;
   duration: number;
@@ -33,7 +33,7 @@ interface CompactFilmInfoProps {
 const CompactFilmInfo: React.FC<CompactFilmInfoProps> = ({
   filmTitle,
   filmTitleTh,
-  filmLanguage,
+  filmLanguages,
   genres,
   format,
   duration,
@@ -227,11 +227,11 @@ const CompactFilmInfo: React.FC<CompactFilmInfoProps> = ({
             </div>
           </div>
             {/* Film Language Badge */}
-            {filmLanguage && (
+            {filmLanguages && filmLanguages.length > 0 && (
               <div className="flex items-center space-x-2 px-3 py-2 glass-card rounded-lg">
                 <span className="text-lg">🗣️</span>
                 <span className={`text-sm ${getClass('body')} text-white font-medium`}>
-                  {filmLanguage}
+                  {filmLanguages.join(', ')}
                 </span>
               </div>
             )}

@@ -300,7 +300,10 @@ const ApplicationLayout: React.FC<ApplicationLayoutProps> = ({ application }) =>
                     <div className="flex items-center space-x-3">
                       <span className="text-xl">🗣️</span>
                       <span className={`${getClass('body')} text-white`}>
-                        {application.filmLanguage}
+                        {Array.isArray(application.filmLanguages) 
+                          ? application.filmLanguages.join(', ')
+                          : application.filmLanguages || 'Thai'
+                        }
                       </span>
                     </div>
                   )}

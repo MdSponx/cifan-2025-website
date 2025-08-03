@@ -86,22 +86,24 @@ const countryFlags: { [key: string]: string } = {
 interface NationalitySelectorProps {
   onNationalityChange: (nationality: string) => void;
   onNationalityTypeChange: (isThaiNationality: boolean) => void;
-  onFilmLanguageChange: (language: string) => void;
-  filmLanguage?: string;
+  onFilmLanguagesChange: (languages: string[]) => void;
+  filmLanguages?: string[];
   className?: string;
 }
 
 const NationalitySelector: React.FC<NationalitySelectorProps> = ({
   onNationalityChange,
   onNationalityTypeChange,
-  onFilmLanguageChange,
-  filmLanguage = 'Thai',
+  onFilmLanguagesChange,
+  filmLanguages = ['Thai'],
   className = ''
 }) => {
   const { i18n } = useTranslation();
   const [nationalityType, setNationalityType] = useState<'thai' | 'international'>('thai');
   const [countrySearch, setCountrySearch] = useState('');
   const [showCountrySuggestions, setShowCountrySuggestions] = useState(false);
+  const [showOtherLanguageInput, setShowOtherLanguageInput] = useState(false);
+  const [customLanguage, setCustomLanguage] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -119,7 +121,10 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
       internationalOption: "นานาชาติ",
       searchCountry: "ค้นหาประเทศ...",
       filmLanguageTitle: "ภาษาในภาพยนตร์",
-      filmLanguageDesc: "ภาษาหลักที่ใช้ในภาพยนตร์ของคุณ"
+      filmLanguageDesc: "ภาษาที่ใช้ในภาพยนตร์ของคุณ (เลือกได้หลายภาษา)",
+      selectedLanguages: "ภาษาที่เลือก:",
+      addCustomLanguage: "เพิ่มภาษาอื่น",
+      customLanguagePlaceholder: "ระบุภาษาอื่น..."
     },
     en: {
       nationalityTitle: "Nationality",
@@ -127,30 +132,36 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
       internationalOption: "International",
       searchCountry: "Search country...",
       filmLanguageTitle: "Film Language",
-      filmLanguageDesc: "Primary language used in your film"
+      filmLanguageDesc: "Languages used in your film (multiple selection allowed)",
+      selectedLanguages: "Selected Languages:",
+      addCustomLanguage: "Add Other Language",
+      customLanguagePlaceholder: "Specify other language..."
     }
   };
 
   const currentContent = content[currentLanguage];
 
   // Film language options
-  const filmLanguageOptions = [
-    { value: 'Thai', label: { th: 'ภาษาไทย', en: 'Thai' } },
-    { value: 'English', label: { th: 'ภาษาอังกฤษ', en: 'English' } },
-    { value: 'Mandarin', label: { th: 'ภาษาจีนกลาง', en: 'Mandarin Chinese' } },
-    { value: 'Japanese', label: { th: 'ภาษาญี่ปุ่น', en: 'Japanese' } },
-    { value: 'Korean', label: { th: 'ภาษาเกาหลี', en: 'Korean' } },
-    { value: 'Vietnamese', label: { th: 'ภาษาเวียดนาม', en: 'Vietnamese' } },
-    { value: 'Malay', label: { th: 'ภาษามาเลย์', en: 'Malay' } },
-    { value: 'Indonesian', label: { th: 'ภาษาอินโดนีเซีย', en: 'Indonesian' } },
-    { value: 'Hindi', label: { th: 'ภาษาฮินดี', en: 'Hindi' } },
-    { value: 'Spanish', label: { th: 'ภาษาสเปน', en: 'Spanish' } },
-    { value: 'French', label: { th: 'ภาษาฝรั่งเศส', en: 'French' } },
-    { value: 'German', label: { th: 'ภาษาเยอรมัน', en: 'German' } },
-    { value: 'Portuguese', label: { th: 'ภาษาโปรตุเกส', en: 'Portuguese' } },
-    { value: 'Russian', label: { th: 'ภาษารัสเซีย', en: 'Russian' } },
-    { value: 'Arabic', label: { th: 'ภาษาอาหรับ', en: 'Arabic' } },
-    { value: 'Other', label: { th: 'อื่นๆ', en: 'Other' } }
+  const majorLanguages = [
+    { value: 'Thai', label: { th: 'ภาษาไทย', en: 'Thai' }, flag: '🇹🇭' },
+    { value: 'English', label: { th: 'ภาษาอังกฤษ', en: 'English' }, flag: '🇺🇸' },
+    { value: 'Mandarin', label: { th: 'ภาษาจีนกลาง', en: 'Mandarin' }, flag: '🇨🇳' },
+    { value: 'Japanese', label: { th: 'ภาษาญี่ปุ่น', en: 'Japanese' }, flag: '🇯🇵' },
+    { value: 'Korean', label: { th: 'ภาษาเกาหลี', en: 'Korean' }, flag: '🇰🇷' },
+    { value: 'Vietnamese', label: { th: 'ภาษาเวียดนาม', en: 'Vietnamese' }, flag: '🇻🇳' },
+    { value: 'Malay', label: { th: 'ภาษามาเลย์', en: 'Malay' }, flag: '🇲🇾' },
+    { value: 'Indonesian', label: { th: 'ภาษาอินโดนีเซีย', en: 'Indonesian' }, flag: '🇮🇩' },
+    { value: 'Hindi', label: { th: 'ภาษาฮินดี', en: 'Hindi' }, flag: '🇮🇳' },
+    { value: 'Spanish', label: { th: 'ภาษาสเปน', en: 'Spanish' }, flag: '🇪🇸' },
+    { value: 'French', label: { th: 'ภาษาฝรั่งเศส', en: 'French' }, flag: '🇫🇷' },
+    { value: 'German', label: { th: 'ภาษาเยอรมัน', en: 'German' }, flag: '🇩🇪' },
+    { value: 'Portuguese', label: { th: 'ภาษาโปรตุเกส', en: 'Portuguese' }, flag: '🇵🇹' },
+    { value: 'Russian', label: { th: 'ภาษารัสเซีย', en: 'Russian' }, flag: '🇷🇺' },
+    { value: 'Arabic', label: { th: 'ภาษาอาหรับ', en: 'Arabic' }, flag: '🇸🇦' },
+    { value: 'Italian', label: { th: 'ภาษาอิตาลี', en: 'Italian' }, flag: '🇮🇹' },
+    { value: 'Dutch', label: { th: 'ภาษาดัตช์', en: 'Dutch' }, flag: '🇳🇱' },
+    { value: 'Swedish', label: { th: 'ภาษาสวีเดน', en: 'Swedish' }, flag: '🇸🇪' },
+    { value: 'Norwegian', label: { th: 'ภาษานอร์เวย์', en: 'Norwegian' }, flag: '🇳🇴' }
   ];
   // Filter countries based on search
   const filteredCountries = COUNTRIES.filter(country =>
@@ -179,7 +190,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
       onNationalityTypeChange(true);
       setCountrySearch('');
       // Default to Thai language for Thai nationality
-      onFilmLanguageChange('Thai');
+      onFilmLanguagesChange(['Thai']);
     } else {
       // CRITICAL FIX: When switching to 'international', immediately set parent nationality to empty
       // and clear the local country search state.
@@ -187,7 +198,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
       onNationalityTypeChange(false);
       setCountrySearch(''); // Clear local search input
       // Default to English for international
-      onFilmLanguageChange('English');
+      onFilmLanguagesChange(['English']);
     }
   };
 
@@ -237,8 +248,63 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
   useEffect(() => {
     onNationalityChange('Thailand');
     onNationalityTypeChange(true);
-    onFilmLanguageChange('Thai');
-  }, [onNationalityChange, onNationalityTypeChange]);
+    onFilmLanguagesChange(['Thai']);
+  }, [onNationalityChange, onNationalityTypeChange, onFilmLanguagesChange]);
+
+  // Handle language selection
+  const handleLanguageToggle = (languageValue: string) => {
+    const currentLanguages = [...(filmLanguages || [])];
+    const index = currentLanguages.indexOf(languageValue);
+    
+    if (index > -1) {
+      // Remove language
+      currentLanguages.splice(index, 1);
+    } else {
+      // Add language
+      currentLanguages.push(languageValue);
+    }
+    
+    onFilmLanguagesChange(currentLanguages);
+  };
+
+  const handleOtherLanguageToggle = () => {
+    if (showOtherLanguageInput) {
+      // Remove custom languages and hide input
+      const standardLanguages = (filmLanguages || []).filter(lang => 
+        majorLanguages.find(option => option.value === lang)
+      );
+      onFilmLanguagesChange(standardLanguages);
+      setShowOtherLanguageInput(false);
+      setCustomLanguage('');
+    } else {
+      // Show input
+      setShowOtherLanguageInput(true);
+    }
+  };
+
+  const handleCustomLanguageAdd = () => {
+    if (customLanguage.trim()) {
+      const currentLanguages = [...(filmLanguages || [])];
+      // Remove any existing custom languages first
+      const standardLanguages = currentLanguages.filter(lang => 
+        majorLanguages.find(option => option.value === lang)
+      );
+      // Add the new custom language
+      standardLanguages.push(customLanguage.trim());
+      onFilmLanguagesChange(standardLanguages);
+      setCustomLanguage('');
+    }
+  };
+
+  const isLanguageSelected = (languageValue: string) => {
+    return (filmLanguages || []).includes(languageValue);
+  };
+
+  const hasCustomLanguages = () => {
+    return (filmLanguages || []).some(lang => 
+      !majorLanguages.find(option => option.value === lang)
+    );
+  };
 
   return (
     <div className={`glass-container form-section-container rounded-xl sm:rounded-2xl p-6 sm:p-8 ${className}`} style={{ overflow: 'visible' }}>
@@ -339,18 +405,117 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
         <p className={`text-xs ${getTypographyClass('body')} text-white/60 mb-3`}>
           {currentContent.filmLanguageDesc}
         </p>
-        <select
-          value={filmLanguage}
-          onChange={(e) => onFilmLanguageChange(e.target.value)}
-          className="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white focus:border-[#FCB283] focus:outline-none"
-          required
-        >
-          {filmLanguageOptions.map((option) => (
-            <option key={option.value} value={option.value} className="bg-[#110D16]">
-              {option.label[currentLanguage]}
-            </option>
+        
+        {/* Language Selection Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 mb-4">
+          {majorLanguages.map((language) => (
+            <button
+              key={language.value}
+              type="button"
+              onClick={() => handleLanguageToggle(language.value)}
+              className={`p-2 sm:p-3 rounded-lg border-2 transition-all duration-200 min-h-[60px] sm:min-h-[70px] ${
+                isLanguageSelected(language.value)
+                  ? 'bg-gradient-to-r from-[#AA4626] to-[#FCB283] border-[#FCB283] text-white shadow-lg'
+                  : 'bg-white/5 border-white/20 text-white/80 hover:border-[#FCB283]/50 hover:bg-white/10'
+              }`}
+            >
+              <div className="flex flex-col items-center justify-center space-y-1 h-full">
+                <span className="text-base sm:text-lg">{language.flag}</span>
+                <span className={`text-xs sm:text-sm ${getTypographyClass('body')} text-center leading-tight px-1`}>
+                  {language.label[currentLanguage]}
+                </span>
+              </div>
+            </button>
           ))}
-        </select>
+          
+          {/* Others Button */}
+          <button
+            type="button"
+            onClick={handleOtherLanguageToggle}
+            className={`p-2 sm:p-3 rounded-lg border-2 transition-all duration-200 min-h-[60px] sm:min-h-[70px] ${
+              showOtherLanguageInput || hasCustomLanguages()
+                ? 'bg-gradient-to-r from-[#AA4626] to-[#FCB283] border-[#FCB283] text-white shadow-lg'
+                : 'bg-white/5 border-white/20 text-white/80 hover:border-[#FCB283]/50 hover:bg-white/10'
+            }`}
+          >
+            <div className="flex flex-col items-center justify-center space-y-1 h-full">
+              <span className="text-base sm:text-lg">🌍</span>
+              <span className={`text-xs sm:text-sm ${getTypographyClass('body')} text-center leading-tight px-1`}>
+                {currentLanguage === 'th' ? 'อื่นๆ' : 'Others'}
+              </span>
+            </div>
+          </button>
+        </div>
+
+        {/* Custom Language Input */}
+        {showOtherLanguageInput && (
+          <div className="mb-4">
+            <label className={`block text-white/90 ${getTypographyClass('body')} mb-2`}>
+              {currentContent.addCustomLanguage}
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={customLanguage}
+                onChange={(e) => setCustomLanguage(e.target.value)}
+                placeholder={currentContent.customLanguagePlaceholder}
+                className="flex-1 p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none"
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleCustomLanguageAdd();
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleCustomLanguageAdd}
+                disabled={!customLanguage.trim()}
+                className="px-4 py-3 bg-[#FCB283] hover:bg-[#AA4626] disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-white transition-colors"
+              >
+                {currentLanguage === 'th' ? 'เพิ่ม' : 'Add'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Selected Languages Display */}
+        {filmLanguages && filmLanguages.length > 0 && (
+          <div className="mt-4">
+            <p className={`text-white/70 ${getTypographyClass('body')} mb-2 text-sm`}>
+              {currentContent.selectedLanguages}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {filmLanguages.map((language, index) => {
+                const standardLanguage = majorLanguages.find(lang => lang.value === language);
+                const displayName = standardLanguage 
+                  ? standardLanguage.label[currentLanguage] 
+                  : language;
+                const flag = standardLanguage ? standardLanguage.flag : '🌍';
+                
+                return (
+                  <span
+                    key={index}
+                    className="inline-flex items-center space-x-1 px-3 py-1 bg-[#FCB283]/20 text-[#FCB283] rounded-full text-xs border border-[#FCB283]/30"
+                  >
+                    <span>{flag}</span>
+                    <span>{displayName}</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newLanguages = filmLanguages.filter(lang => lang !== language);
+                        onFilmLanguagesChange(newLanguages);
+                      }}
+                      className="ml-1 text-[#FCB283] hover:text-white transition-colors"
+                    >
+                      ×
+                    </button>
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        )}
         
         {/* Language Note */}
         <div className="mt-3 p-3 bg-blue-500/10 border border-blue-400/20 rounded-lg">
