@@ -242,11 +242,11 @@ export interface ChartContainerProps {
 
 // Admin Application Details and Scoring
 export interface ScoringCriteria {
-  technical: number;      // 1-10
-  story: number;         // 1-10  
   creativity: number;    // 1-10
+  technical: number;     // 1-10
+  story: number;         // 1-10  
   chiangmai: number;     // 1-10
-  overall: number;       // 1-10
+  humanEffort: number;   // 1-10
   totalScore: number;    // calculated (0-50)
   adminId: string;
   adminName: string;

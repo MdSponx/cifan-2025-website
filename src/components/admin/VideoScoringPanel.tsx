@@ -38,7 +38,7 @@ const VideoScoringPanel: React.FC<VideoScoringPanelProps> = ({
       story: "เรื่องราวและการเล่าเรื่อง",
       creativity: "ความคิดสร้างสรรค์และความเป็นต้นฉบับ",
       chiangmai: "ความเกี่ยวข้องกับเชียงใหม่",
-      overall: "ความประทับใจโดยรวม",
+      humanEffort: "ความพยายามของมนุษย์ในการสร้างสรรค์",
       totalScore: "คะแนนรวม",
       comments: "ความคิดเห็นเพิ่มเติม",
       commentsPlaceholder: "เขียนความคิดเห็นเกี่ยวกับผลงานนี้...",
@@ -62,7 +62,7 @@ const VideoScoringPanel: React.FC<VideoScoringPanelProps> = ({
       story: "Story & Narrative",
       creativity: "Creativity & Originality",
       chiangmai: "Connection to Chiang Mai",
-      overall: "Overall Impact",
+      humanEffort: "Human Effort in Creation",
       totalScore: "Total Score",
       comments: "Additional Comments",
       commentsPlaceholder: "Write your comments about this film...",
@@ -84,15 +84,15 @@ const VideoScoringPanel: React.FC<VideoScoringPanelProps> = ({
   const currentContent = content[currentLanguage];
 
   const criteriaInfo = [
+    { key: 'creativity', label: currentContent.creativity, icon: '✨' },
     { key: 'technical', label: currentContent.technical, icon: '🎬' },
     { key: 'story', label: currentContent.story, icon: '📖' },
-    { key: 'creativity', label: currentContent.creativity, icon: '✨' },
     { key: 'chiangmai', label: currentContent.chiangmai, icon: '🏔️' },
-    { key: 'overall', label: currentContent.overall, icon: '🎯' }
+    { key: 'humanEffort', label: currentContent.humanEffort, icon: '🤝' }
   ];
 
   // Calculate total score
-  const totalScore = (scores.technical || 0) + (scores.story || 0) + (scores.creativity || 0) + (scores.chiangmai || 0) + (scores.overall || 0);
+  const totalScore = (scores.creativity || 0) + (scores.technical || 0) + (scores.story || 0) + (scores.chiangmai || 0) + (scores.humanEffort || 0);
   const totalPercentage = Math.round((totalScore / 50) * 100);
 
   // Calculate average from all scores
@@ -129,7 +129,7 @@ const VideoScoringPanel: React.FC<VideoScoringPanelProps> = ({
       story: scores.story || 0,
       creativity: scores.creativity || 0,
       chiangmai: scores.chiangmai || 0,
-      overall: scores.overall || 0,
+      humanEffort: scores.humanEffort || 0,
       totalScore,
       adminId: user.uid,
       adminName: user.displayName || user.email || 'Admin',
@@ -147,7 +147,7 @@ const VideoScoringPanel: React.FC<VideoScoringPanelProps> = ({
       story: 0,
       creativity: 0,
       chiangmai: 0,
-      overall: 0,
+      humanEffort: 0,
       comments: ''
     });
   };
@@ -313,7 +313,7 @@ const VideoScoringPanel: React.FC<VideoScoringPanelProps> = ({
                     {score.totalScore}/40
                   </p>
                   <p className={`${getClass('body')} text-white/60 text-xs`}>
-                    T:{score.technical} S:{score.story} C:{score.creativity} CM:{score.chiangmai} O:{score.overall}
+                    C:{score.creativity} T:{score.technical} S:{score.story} CM:{score.chiangmai} H:{score.humanEffort}
                   </p>
                 </div>
               </div>
