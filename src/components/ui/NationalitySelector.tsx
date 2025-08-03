@@ -406,44 +406,40 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
           {currentContent.filmLanguageDesc}
         </p>
         
-        {/* Language Selection Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 mb-4">
+        {/* Language Selection Grid - Compact Pills */}
+        <div className="flex flex-wrap gap-2 mb-4">
           {majorLanguages.map((language) => (
             <button
               key={language.value}
               type="button"
               onClick={() => handleLanguageToggle(language.value)}
-              className={`p-2 sm:p-3 rounded-lg border-2 transition-all duration-200 min-h-[60px] sm:min-h-[70px] ${
+              className={`px-3 py-2 rounded-full border-2 transition-all duration-200 flex items-center space-x-2 ${
                 isLanguageSelected(language.value)
                   ? 'bg-gradient-to-r from-[#AA4626] to-[#FCB283] border-[#FCB283] text-white shadow-lg'
                   : 'bg-white/5 border-white/20 text-white/80 hover:border-[#FCB283]/50 hover:bg-white/10'
               }`}
             >
-              <div className="flex flex-col items-center justify-center space-y-1 h-full">
-                <span className="text-base sm:text-lg">{language.flag}</span>
-                <span className={`text-xs sm:text-sm ${getTypographyClass('body')} text-center leading-tight px-1`}>
-                  {language.label[currentLanguage]}
-                </span>
-              </div>
+              <span className="text-sm">{language.flag}</span>
+              <span className={`text-xs ${getTypographyClass('body')} whitespace-nowrap`}>
+                {language.label[currentLanguage]}
+              </span>
             </button>
           ))}
           
-          {/* Others Button */}
+          {/* Others Button - Pill Shape */}
           <button
             type="button"
             onClick={handleOtherLanguageToggle}
-            className={`p-2 sm:p-3 rounded-lg border-2 transition-all duration-200 min-h-[60px] sm:min-h-[70px] ${
+            className={`px-3 py-2 rounded-full border-2 transition-all duration-200 flex items-center space-x-2 ${
               showOtherLanguageInput || hasCustomLanguages()
                 ? 'bg-gradient-to-r from-[#AA4626] to-[#FCB283] border-[#FCB283] text-white shadow-lg'
                 : 'bg-white/5 border-white/20 text-white/80 hover:border-[#FCB283]/50 hover:bg-white/10'
             }`}
           >
-            <div className="flex flex-col items-center justify-center space-y-1 h-full">
-              <span className="text-base sm:text-lg">🌍</span>
-              <span className={`text-xs sm:text-sm ${getTypographyClass('body')} text-center leading-tight px-1`}>
-                {currentLanguage === 'th' ? 'อื่นๆ' : 'Others'}
-              </span>
-            </div>
+            <span className="text-sm">🌍</span>
+            <span className={`text-xs ${getTypographyClass('body')} whitespace-nowrap`}>
+              {currentLanguage === 'th' ? 'อื่นๆ' : 'Others'}
+            </span>
           </button>
         </div>
 
@@ -459,7 +455,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
                 value={customLanguage}
                 onChange={(e) => setCustomLanguage(e.target.value)}
                 placeholder={currentContent.customLanguagePlaceholder}
-                className="flex-1 p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none"
+                className="flex-1 p-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none text-sm"
                 onKeyPress={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
@@ -471,7 +467,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
                 type="button"
                 onClick={handleCustomLanguageAdd}
                 disabled={!customLanguage.trim()}
-                className="px-4 py-3 bg-[#FCB283] hover:bg-[#AA4626] disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-white transition-colors"
+                className="px-4 py-2 bg-[#FCB283] hover:bg-[#AA4626] disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-white transition-colors text-sm"
               >
                 {currentLanguage === 'th' ? 'เพิ่ม' : 'Add'}
               </button>
@@ -485,7 +481,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
             <p className={`text-white/70 ${getTypographyClass('body')} mb-2 text-sm`}>
               {currentContent.selectedLanguages}
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 mb-3">
               {filmLanguages.map((language, index) => {
                 const standardLanguage = majorLanguages.find(lang => lang.value === language);
                 const displayName = standardLanguage 
@@ -496,7 +492,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
                 return (
                   <span
                     key={index}
-                    className="inline-flex items-center space-x-1 px-3 py-1 bg-[#FCB283]/20 text-[#FCB283] rounded-full text-xs border border-[#FCB283]/30"
+                    className="inline-flex items-center space-x-2 px-3 py-1 bg-[#FCB283]/20 text-[#FCB283] rounded-full text-sm border border-[#FCB283]/30"
                   >
                     <span>{flag}</span>
                     <span>{displayName}</span>
@@ -506,7 +502,7 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
                         const newLanguages = filmLanguages.filter(lang => lang !== language);
                         onFilmLanguagesChange(newLanguages);
                       }}
-                      className="ml-1 text-[#FCB283] hover:text-white transition-colors"
+                      className="ml-1 text-[#FCB283] hover:text-white transition-colors text-sm font-bold"
                     >
                       ×
                     </button>
@@ -514,6 +510,11 @@ const NationalitySelector: React.FC<NationalitySelectorProps> = ({
                 );
               })}
             </div>
+            
+            {/* Language count indicator */}
+            <p className={`text-xs ${getTypographyClass('body')} text-white/50`}>
+              {filmLanguages.length} {currentLanguage === 'th' ? 'ภาษาที่เลือก' : 'languages selected'}
+            </p>
           </div>
         )}
         
