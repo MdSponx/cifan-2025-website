@@ -660,20 +660,19 @@ const ApplicationEditPage: React.FC<ApplicationEditPageProps> = ({
                   <ErrorMessage error={formErrors.filmTitle} />
                 </div>
                 
-                {isThaiNationality && (
-                  <div>
-                    <label className={`block text-white/90 ${getClass('body')} mb-2`}>
-                      {currentContent.filmTitleTh}
-                    </label>
-                    <input
-                      type="text"
-                      value={application.filmTitleTh || ''}
-                      onChange={(e) => handleInputChange('filmTitleTh', e.target.value)}
-                      className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.filmTitleTh ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
-                    />
-                    <ErrorMessage error={formErrors.filmTitleTh} />
-                  </div>
-                )}
+                <div>
+                  <label className={`block text-white/90 ${getClass('body')} mb-2`}>
+                    {currentContent.filmTitleTh} <span className="text-white/60">({currentLanguage === 'th' ? 'ไม่บังคับ' : 'Optional'})</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={application.filmTitleTh || ''}
+                    onChange={(e) => handleInputChange('filmTitleTh', e.target.value)}
+                    className={`w-full p-3 rounded-lg bg-white/10 border ${formErrors.filmTitleTh ? 'border-red-400 error-field' : 'border-white/20'} text-white placeholder-white/50 focus:border-[#FCB283] focus:outline-none`}
+                    placeholder={currentLanguage === 'th' ? 'ชื่อภาพยนตร์ภาษาไทย (ไม่บังคับ)' : 'Film title in Thai (optional)'}
+                  />
+                  <ErrorMessage error={formErrors.filmTitleTh} />
+                </div>
               </div>
               
               {/* Film Language */}
